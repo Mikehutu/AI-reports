@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="en">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI Reports — Benchmark Portfolio</title>
+<style>
+:root {
+  --bg: #0a0a12;
+  --bg2: #0f1020;
+  --card: rgba(255,255,255,0.035);
+  --card-hover: rgba(255,255,255,0.06);
+  --border: rgba(255,255,255,0.08);
+  --border-bright: rgba(0,255,136,0.3);
+  --text: #e2e4f0;
+  --text-dim: #8888a0;
+  --green: #00ff88;
+  --cyan: #00ddff;
+  --purple: #a855f7;
+  --gold: #ffaa00;
+  --red: #ff4466;
+  --radius: 16px;
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+body {
+  font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  overflow-x: hidden;
+  line-height: 1.6;
+}
+.bg-grid {
+  position: fixed; inset: 0; z-index: 0; pointer-events: none;
+  background-image:
+    linear-gradient(rgba(0,255,136,0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0,255,136,0.03) 1px, transparent 1px);
+  background-size: 60px 60px;
+  animation: gridMove 20s linear infinite;
+}
+@keyframes gridMove {
+  from { background-position: 0 0; }
+  to { background-position: 60px 60px; }
+}
+.bg-glow1 {
+  position: fixed; top: -20%; left: -10%; width: 60%; height: 60%;
+  background: radial-gradient(circle, rgba(0,255,136,0.08), transparent 60%);
+  z-index: 0; pointer-events: none; animation: glowFloat 15s ease-in-out infinite alternate;
+}
+.bg-glow2 {
+  position: fixed; bottom: -20%; right: -10%; width: 50%; height: 50%;
+  background: radial-gradient(circle, rgba(168,85,247,0.06), transparent 60%);
+  z-index: 0; pointer-events: none; animation: glowFloat 18s ease-in-out infinite alternate-reverse;
+}
+@keyframes glowFloat {
+  from { transform: translate(0,0) scale(1); }
+  to { transform: translate(5%, 5%) scale(1.1); }
+}
+.container { max-width: 1100px; margin: 0 auto; padding: 0 24px; position: relative; z-index: 1; }
+
+.hero {
+  min-height: 80vh;
+  display: flex; flex-direction: column; justify-content: center; align-items: center;
+  text-align: center; padding: 80px 24px 60px;
+}
+.hero-badge {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: rgba(0,255,136,0.1); border: 1px solid rgba(0,255,136,0.3);
+  padding: 6px 16px; border-radius: 30px; font-size: 13px; color: var(--green);
+  margin-bottom: 24px; backdrop-filter: blur(10px);
+}
+.hero-badge .dot { width:8px; height:8px; border-radius:50%; background:var(--green); animation: pulse 2s infinite; }
+@keyframes pulse { 0%,100%{opacity:1;} 50%{opacity:0.3;} }
+
+.hero h1 {
+  font-size: clamp(36px, 6vw, 72px); font-weight: 800; letter-spacing: -2px;
+  background: linear-gradient(135deg, var(--green), var(--cyan), var(--purple));
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+  margin-bottom: 12px; line-height: 1.1;
+}
+.hero h1 small {
+  font-size: 0.5em; display: block; margin-top: 8px;
+  color: var(--text-dim); font-weight: 400;
+}
+.hero-sub { font-size: 17px; color: var(--text-dim); max-width: 640px; margin-bottom: 36px; }
+
+.stats-row { display: flex; flex-wrap: wrap; gap: 14px; justify-content: center; margin-bottom: 48px; }
+.stat-pill {
+  background: var(--card); border: 1px solid var(--border); border-radius: 12px;
+  padding: 14px 24px; text-align: center; min-width: 100px; backdrop-filter: blur(10px);
+  transition: all 0.3s;
+}
+.stat-pill:hover { border-color: var(--border-bright); transform: translateY(-3px) scale(1.03); }
+.stat-pill .sp-num { font-size: 26px; font-weight: 800; background: linear-gradient(135deg, var(--green), var(--cyan)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+.stat-pill .sp-label { font-size: 11px; color: var(--text-dim); text-transform: uppercase; letter-spacing: 1px; margin-top: 2px; }
+
+/* Section */
+section { padding: 40px 0; }
+.section-title {
+  font-size: 28px; font-weight: 700; margin-bottom: 8px; letter-spacing: -1px;
+}
+.section-title .accent { color: var(--green); }
+.section-sub { color: var(--text-dim); font-size: 14px; margin-bottom: 32px; }
+
+/* Report Cards Grid */
+.report-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 24px; }
+
+.report-card {
+  background: var(--card); border: 1px solid var(--border); border-radius: var(--radius);
+  padding: 28px; backdrop-filter: blur(10px); position: relative; overflow: hidden;
+  transition: all 0.4s cubic-bezier(0.23,1,0.32,1);
+  transform-style: preserve-3d; perspective: 800px;
+  cursor: pointer;
+  onclick: "location.href=this.dataset.href";
+}
+.report-card:hover {
+  border-color: var(--border-bright);
+  transform: translateY(-4px) rotateX(2deg) translateZ(10px);
+  box-shadow: 0 12px 40px rgba(0,255,136,0.06);
+}
+.report-card::after {
+  content: ''; position: absolute; inset: 0; border-radius: var(--radius); pointer-events: none;
+  background: linear-gradient(135deg, transparent 40%, rgba(0,255,136,0.04) 60%, transparent 80%);
+  opacity: 0; transition: opacity 0.3s;
+}
+.report-card:hover::after { opacity: 1; }
+
+.card-icon {
+  font-size: 36px; margin-bottom: 16px; display: block;
+  filter: drop-shadow(0 2px 10px rgba(0,255,136,0.15));
+}
+.card-title { font-size: 18px; font-weight: 700; margin-bottom: 8px; }
+.card-desc { font-size: 13px; color: var(--text-dim); margin-bottom: 16px; line-height: 1.5; }
+
+.card-tags { margin-bottom: 16px; }
+.tag {
+  display: inline-block; font-size: 11px; padding: 3px 10px; border-radius: 20px;
+  margin-right: 6px; margin-bottom: 4px;
+}
+.tag-green { background: rgba(0,255,136,0.12); color: var(--green); border: 1px solid rgba(0,255,136,0.25); }
+.tag-cyan { background: rgba(0,221,255,0.12); color: var(--cyan); border: 1px solid rgba(0,221,255,0.25); }
+.tag-purple { background: rgba(168,85,247,0.12); color: var(--purple); border: 1px solid rgba(168,85,247,0.25); }
+.tag-gold { background: rgba(255,170,0,0.12); color: var(--gold); border: 1px solid rgba(255,170,0,0.25); }
+
+.card-stats { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.card-stat {
+  background: rgba(255,255,255,0.03); border-radius: 10px; padding: 8px 12px;
+}
+.card-stat .cs-label { font-size: 10px; color: var(--text-dim); text-transform: uppercase; letter-spacing: 0.5px; }
+.card-stat .cs-value { font-size: 18px; font-weight: 700; margin-top: 1px; }
+.card-stat .cs-value.green { color: var(--green); }
+.card-stat .cs-value.cyan { color: var(--cyan); }
+.card-stat .cs-value.purple { color: var(--purple); }
+.card-stat .cs-value.gold { color: var(--gold); }
+
+.card-date { font-size: 12px; color: var(--text-dim); border-top: 1px solid var(--border); padding-top: 12px; display: flex; align-items: center; gap: 6px; }
+
+/* Empty state */
+.empty-state {
+  text-align: center; padding: 60px;
+  background: var(--card); border: 1px dashed var(--border); border-radius: var(--radius);
+}
+.empty-state .es-icon { font-size: 48px; margin-bottom: 16px; }
+.empty-state .es-title { font-size: 18px; font-weight: 600; margin-bottom: 8px; }
+.empty-state .es-desc { font-size: 14px; color: var(--text-dim); }
+
+/* Scroll reveal */
+.reveal { opacity: 0; transform: translateY(30px); transition: all 0.7s cubic-bezier(0.23,1,0.32,1); }
+.reveal.visible { opacity: 1; transform: translateY(0); }
+
+footer { padding: 40px 24px; text-align: center; color: var(--text-dim); font-size: 13px; border-top: 1px solid var(--border); }
+</style>
+</head>
+<body>
+<div class="bg-grid"></div>
+<div class="bg-glow1"></div>
+<div class="bg-glow2"></div>
+
+<div class="hero">
+  <div class="hero-badge"><span class="dot"></span> Public Benchmark Portfolio</div>
+  <h1>AI Reports<small>Local LLM benchmarking on real hardware</small></h1>
+  <p class="hero-sub">Standardized evaluations of quantized models for tool-calling, agent autonomy, and production readiness — run on GB10, consumer GPUs, and the DGX Spark.</p>
+  <div class="stats-row" id="heroStats"></div>
+</div>
+
+<section>
+  <div class="container">
+    <h2 class="section-title">Benchmark <span class="accent">Reports</span></h2>
+    <p class="section-sub">Click any card to view the full report.</p>
+    <div id="reportGrid" class="report-grid"></div>
+  </div>
+</section>
+
+<footer>
+  <p>AI Reports · Hermes Agent · All benchmarks reproducible with tool-eval-bench</p>
+</footer>
+
+<script>
+// ============ REPORT REGISTRY ============
+// Add new reports here. Cards auto-sort by date (newest first).
+const REPORTS = [
+  {
+    folder: 'bonsai-27b-benchmarks',
+    icon: '🎋',
+    iconColor: 'green',
+    title: 'Bonsai 27B + Comparison Models',
+    desc: 'Comprehensive 79-scenario benchmark across 11 model variants including Bonsai Q1_0/Ternary Q2_0, Qwen3.6 35B/27B, Gemma-4-12B, Gemma 4 E4B, and DiffusionGemma-26B — on NVIDIA GB10.',
+    date: '2026-07-17',
+    tags: ['Bonsai', 'Qwen3.6', 'Gemma-4', 'DiffusionGemma', 'llama.cpp', 'vllm'],
+    stats: [
+      { label: 'Top Score', value: '90', color: 'gold' },
+      { label: 'Variants', value: '11', color: 'green' },
+      { label: 'Best Value', value: '85', color: 'cyan' },
+      { label: 'Fastest Turn', value: '0.69s', color: 'purple' },
+    ],
+  },
+];
+
+// ============ RENDER ============
+function computeStats(reports) {
+  const uniqueModels = new Set();
+  const uniqueTags = new Set();
+  let totalScenarios = 0;
+  let totalVariants = 0;
+
+  reports.forEach(r => {
+    r.tags.forEach(t => uniqueTags.add(t));
+    if (r.stats) {
+      r.stats.forEach(s => {
+        if (s.label === 'Variants') totalVariants += parseInt(s.value) || 0;
+      });
+    }
+    // Count models from tags
+    ['Qwen3.6','Gemma','Bonsai','DiffusionGemma'].forEach(m => {
+      if (r.tags.includes(m)) uniqueModels.add(m);
+    });
+  });
+
+  return {
+    reports: reports.length,
+    variants: totalVariants || '—',
+    tags: uniqueTags.size,
+    models: uniqueModels.size || '—',
+  };
+}
+
+function renderStats() {
+  const s = computeStats(REPORTS);
+  const container = document.getElementById('heroStats');
+  const items = [
+    { num: s.reports, label: 'Reports' },
+    { num: s.variants, label: 'Model Variants' },
+    { num: s.models || '—', label: 'Model Families' },
+    { num: '79', label: 'Scenarios' },
+  ];
+  container.innerHTML = items.map(i => `
+    <div class="stat-pill">
+      <div class="sp-num">${i.num}</div>
+      <div class="sp-label">${i.label}</div>
+    </div>
+  `).join('');
+}
+
+function renderCards() {
+  const grid = document.getElementById('reportGrid');
+
+  if (REPORTS.length === 0) {
+    grid.innerHTML = `
+      <div class="empty-state">
+        <div class="es-icon">📊</div>
+        <div class="es-title">No reports yet</div>
+        <div class="es-desc">Add your first benchmark report to the registry above.</div>
+      </div>
+    `;
+    return;
+  }
+
+  const sorted = [...REPORTS].sort((a, b) => b.date.localeCompare(a.date) || a.title.localeCompare(b.title));
+
+  grid.innerHTML = sorted.map(r => {
+    const tagColors = { green: 'tag-green', cyan: 'tag-cyan', purple: 'tag-purple', gold: 'tag-gold' };
+    const tagsHtml = (r.tags || []).map(t => {
+      const color = t.includes('Bonsai') ? 'tag-cyan' :
+                    t.includes('Qwen') ? 'tag-gold' :
+                    t.includes('Gemma') ? 'tag-purple' :
+                    t.includes('Diffusion') ? 'tag-cyan' : 'tag-green';
+      return `<span class="tag ${color}">${t}</span>`;
+    }).join('');
+
+    const statsHtml = (r.stats || []).map(s => `
+      <div class="card-stat">
+        <div class="cs-label">${s.label}</div>
+        <div class="cs-value ${s.color || 'green'}">${s.value}</div>
+      </div>
+    `).join('');
+
+    const iconColors = { green: '#00ff88', cyan: '#00ddff', purple: '#a855f7', gold: '#ffaa00' };
+
+    return `
+    <div class="report-card" data-href="${r.folder}/" onclick="location.href=this.dataset.href">
+      <span class="card-icon" style="color:${iconColors[r.iconColor] || '#00ff88'}">${r.icon}</span>
+      <div class="card-title">${r.title}</div>
+      <div class="card-desc">${r.desc}</div>
+      <div class="card-tags">${tagsHtml}</div>
+      <div class="card-stats">${statsHtml}</div>
+      <div class="card-date">📅 ${r.date}</div>
+    </div>`;
+  }).join('');
+}
+
+// ============ SCROLL REVEAL ============
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+}, { threshold: 0.1 });
+document.querySelectorAll('section').forEach(s => { s.classList.add('reveal'); observer.observe(s); });
+
+// ============ INIT ============
+renderStats();
+renderCards();
+</script>
+</body>
+</html>

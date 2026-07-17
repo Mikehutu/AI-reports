@@ -1,18 +1,52 @@
 # AI Reports
 
-Public benchmark reports and evaluations for local LLM models on AI hardware.
+Public benchmark portfolio for local LLM models — standardized evaluations on real hardware.
 
-## Contents
+## Structure
 
-| Report | Description |
-|---|---|
-| `bonsai-benchmarks.html` | Bonsai 27B + comparison models benchmark — full suite (79 scenarios) across 11 model variants on NVIDIA GB10 |
-| `bonsai-benchmark-results.md` | Source markdown with raw data, category breakdowns, and deployment guidance |
+```
+ai-reports/
+├── index.html                   ← Landing page (auto-sorted report cards)
+├── bonsai-27b-benchmarks/
+│   ├── index.html               ← Bonsai 27B + comparison models dashboard
+│   └── bonsai-benchmark-results.md
+└── README.md
+```
 
-## Hardware
+## Adding a New Report
 
-All benchmarks run on **gx10-b** (NVIDIA GB10, 128 GB unified VRAM) with PrismML llama.cpp fork (b9591, CUDA).
+1. Create a subfolder with an `index.html`
+2. Add an entry to the `REPORTS` array at the top of `index.html`:
+   ```js
+   {
+     folder: 'your-report-folder',
+     icon: '📊',                          // emoji
+     iconColor: 'green',                  // green | cyan | purple | gold
+     title: 'Your Report Title',
+     desc: 'Short description...',
+     date: '2026-08-01',
+     tags: ['Tag1', 'Tag2'],
+     stats: [
+       { label: 'Score', value: '90', color: 'gold' },
+       { label: 'Models', value: '5', color: 'green' },
+     ],
+   }
+   ```
+3. The card appears automatically on the landing page — no other code changes needed.
+
+## Viewing
+
+Enable GitHub Pages: **Settings → Pages → Source: main → /root**  
+Portfolio goes live at `https://mikehutu.github.io/ai-reports/`
 
 ## Methodology
 
-Using [tool-eval-bench](https://github.com/Mikehutu/tool-eval-bench) v2.1.0 — 79 scenario evaluation covering tool selection, multi-step chains, safety, localization, and structured output.
+All benchmarks use [tool-eval-bench](https://github.com/Mikehutu/tool-eval-bench) v2.1.0 — 79 scenarios covering tool selection, parameter precision, multi-step chains, safety, localization, and structured output.
+
+### Hardware
+
+| Machine | Spec | Used For |
+|---|---|---|
+| **gx10-b** | NVIDIA GB10, 128 GB unified VRAM | Bonsai, Qwen, Gemma benchmarks via llama.cpp / PrismML fork |
+| **gx10-b** | DGX Spark, 121 GB VRAM | DiffusionGemma via vllm (Docker) |
+| **minisforum** | AI X1 Pro WSL | Local development |
