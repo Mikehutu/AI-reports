@@ -1,8 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
+<head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>AI Reports — Benchmark Portfolio</title>
+<title>AI Benchmark Reports</title>
 <style>
 :root {
   --bg: #0a0a12;
@@ -23,23 +24,17 @@
 * { margin:0; padding:0; box-sizing:border-box; }
 body {
   font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
-  background: var(--bg);
-  color: var(--text);
-  overflow-x: hidden;
-  line-height: 1.6;
+  background: var(--bg); color: var(--text); overflow-x: hidden; line-height: 1.6;
+  min-height: 100vh;
 }
 .bg-grid {
   position: fixed; inset: 0; z-index: 0; pointer-events: none;
   background-image:
     linear-gradient(rgba(0,255,136,0.03) 1px, transparent 1px),
     linear-gradient(90deg, rgba(0,255,136,0.03) 1px, transparent 1px);
-  background-size: 60px 60px;
-  animation: gridMove 20s linear infinite;
+  background-size: 60px 60px; animation: gridMove 20s linear infinite;
 }
-@keyframes gridMove {
-  from { background-position: 0 0; }
-  to { background-position: 60px 60px; }
-}
+@keyframes gridMove { from { background-position: 0 0; } to { background-position: 60px 60px; } }
 .bg-glow1 {
   position: fixed; top: -20%; left: -10%; width: 60%; height: 60%;
   background: radial-gradient(circle, rgba(0,255,136,0.08), transparent 60%);
@@ -56,10 +51,10 @@ body {
 }
 .container { max-width: 1100px; margin: 0 auto; padding: 0 24px; position: relative; z-index: 1; }
 
+/* Hero */
 .hero {
-  min-height: 80vh;
-  display: flex; flex-direction: column; justify-content: center; align-items: center;
-  text-align: center; padding: 80px 24px 60px;
+  min-height: 70vh; display: flex; flex-direction: column; justify-content: center; align-items: center;
+  text-align: center; padding: 80px 24px 40px; perspective: 1000px;
 }
 .hero-badge {
   display: inline-flex; align-items: center; gap: 8px;
@@ -69,20 +64,20 @@ body {
 }
 .hero-badge .dot { width:8px; height:8px; border-radius:50%; background:var(--green); animation: pulse 2s infinite; }
 @keyframes pulse { 0%,100%{opacity:1;} 50%{opacity:0.3;} }
-
 .hero h1 {
-  font-size: clamp(36px, 6vw, 72px); font-weight: 800; letter-spacing: -2px;
+  font-size: clamp(36px, 6vw, 64px); font-weight: 800; letter-spacing: -2px;
   background: linear-gradient(135deg, var(--green), var(--cyan), var(--purple));
   -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
-  margin-bottom: 12px; line-height: 1.1;
+  margin-bottom: 16px; line-height: 1.1;
+  transform-style: preserve-3d; animation: heroTilt 8s ease-in-out infinite;
 }
-.hero h1 small {
-  font-size: 0.5em; display: block; margin-top: 8px;
-  color: var(--text-dim); font-weight: 400;
+@keyframes heroTilt {
+  0%,100% { transform: rotateY(0deg) rotateX(0deg); }
+  50% { transform: rotateY(3deg) rotateX(-2deg); }
 }
-.hero-sub { font-size: 17px; color: var(--text-dim); max-width: 640px; margin-bottom: 36px; }
+.hero-sub { font-size: 17px; color: var(--text-dim); max-width: 600px; margin-bottom: 32px; }
 
-.stats-row { display: flex; flex-wrap: wrap; gap: 14px; justify-content: center; margin-bottom: 48px; }
+.hero-stats { display: flex; flex-wrap: wrap; gap: 16px; justify-content: center; }
 .stat-pill {
   background: var(--card); border: 1px solid var(--border); border-radius: 12px;
   padding: 14px 24px; text-align: center; min-width: 100px; backdrop-filter: blur(10px);
@@ -90,30 +85,29 @@ body {
 }
 .stat-pill:hover { border-color: var(--border-bright); transform: translateY(-3px) scale(1.03); }
 .stat-pill .sp-num { font-size: 26px; font-weight: 800; background: linear-gradient(135deg, var(--green), var(--cyan)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-.stat-pill .sp-label { font-size: 11px; color: var(--text-dim); text-transform: uppercase; letter-spacing: 1px; margin-top: 2px; }
+.stat-pill .sp-label { font-size: 11px; color: var(--text-dim); text-transform: uppercase; letter-spacing: 1px; }
 
-/* Section */
-section { padding: 40px 0; }
-.section-title {
-  font-size: 28px; font-weight: 700; margin-bottom: 8px; letter-spacing: -1px;
+/* Reports grid */
+.reports-section { padding: 40px 0 80px; }
+.reports-header {
+  display: flex; justify-content: space-between; align-items: center; margin-bottom: 32px; flex-wrap: wrap; gap: 16px;
 }
-.section-title .accent { color: var(--green); }
-.section-sub { color: var(--text-dim); font-size: 14px; margin-bottom: 32px; }
+.reports-header h2 { font-size: 28px; font-weight: 700; letter-spacing: -0.5px; }
+.reports-header h2 .accent { color: var(--green); }
+.reports-header .filter-info { font-size: 13px; color: var(--text-dim); }
 
-/* Report Cards Grid */
-.report-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 24px; }
+.reports-grid {
+  display: grid; grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); gap: 24px;
+}
 
 .report-card {
   background: var(--card); border: 1px solid var(--border); border-radius: var(--radius);
   padding: 28px; backdrop-filter: blur(10px); position: relative; overflow: hidden;
-  transition: all 0.4s cubic-bezier(0.23,1,0.32,1);
-  transform-style: preserve-3d; perspective: 800px;
-  cursor: pointer;
-  onclick: "location.href=this.dataset.href";
+  transition: all 0.4s cubic-bezier(0.23,1,0.32,1); transform-style: preserve-3d;
+  text-decoration: none; color: inherit; display: block;
 }
 .report-card:hover {
-  border-color: var(--border-bright);
-  transform: translateY(-4px) rotateX(2deg) translateZ(10px);
+  border-color: var(--border-bright); transform: translateY(-6px);
   box-shadow: 0 12px 40px rgba(0,255,136,0.06);
 }
 .report-card::after {
@@ -123,50 +117,72 @@ section { padding: 40px 0; }
 }
 .report-card:hover::after { opacity: 1; }
 
-.card-icon {
-  font-size: 36px; margin-bottom: 16px; display: block;
-  filter: drop-shadow(0 2px 10px rgba(0,255,136,0.15));
+.rc-top { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 16px; }
+.rc-icon {
+  width: 52px; height: 52px; border-radius: 14px; display: flex; align-items: center; justify-content: center;
+  font-size: 26px; position: relative; flex-shrink: 0;
 }
-.card-title { font-size: 18px; font-weight: 700; margin-bottom: 8px; }
-.card-desc { font-size: 13px; color: var(--text-dim); margin-bottom: 16px; line-height: 1.5; }
+.rc-icon::before {
+  content: ''; position: absolute; inset: 0; border-radius: 14px; opacity: 0.12;
+}
+.rc-icon.green::before { background: var(--green); }
+.rc-icon.green { color: var(--green); }
+.rc-icon.cyan::before { background: var(--cyan); }
+.rc-icon.cyan { color: var(--cyan); }
+.rc-icon.purple::before { background: var(--purple); }
+.rc-icon.purple { color: var(--purple); }
+.rc-icon.gold::before { background: var(--gold); }
+.rc-icon.gold { color: var(--gold); }
 
-.card-tags { margin-bottom: 16px; }
+.rc-date { font-size: 12px; color: var(--text-dim); text-align: right; }
+.rc-title { font-size: 18px; font-weight: 700; margin-bottom: 8px; }
+.rc-desc { font-size: 14px; color: var(--text-dim); margin-bottom: 16px; line-height: 1.5; }
+
+.rc-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 16px; }
 .tag {
   display: inline-block; font-size: 11px; padding: 3px 10px; border-radius: 20px;
-  margin-right: 6px; margin-bottom: 4px;
+  background: rgba(255,255,255,0.04); border: 1px solid var(--border); color: var(--text-dim);
 }
-.tag-green { background: rgba(0,255,136,0.12); color: var(--green); border: 1px solid rgba(0,255,136,0.25); }
-.tag-cyan { background: rgba(0,221,255,0.12); color: var(--cyan); border: 1px solid rgba(0,221,255,0.25); }
-.tag-purple { background: rgba(168,85,247,0.12); color: var(--purple); border: 1px solid rgba(168,85,247,0.25); }
-.tag-gold { background: rgba(255,170,0,0.12); color: var(--gold); border: 1px solid rgba(255,170,0,0.25); }
 
-.card-stats { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-.card-stat {
-  background: rgba(255,255,255,0.03); border-radius: 10px; padding: 8px 12px;
+.rc-stats { display: flex; gap: 20px; border-top: 1px solid var(--border); padding-top: 14px; }
+.rc-stat { display: flex; flex-direction: column; }
+.rc-stat .s-label { font-size: 10px; color: var(--text-dim); text-transform: uppercase; letter-spacing: 0.5px; }
+.rc-stat .s-value { font-size: 15px; font-weight: 600; margin-top: 2px; }
+.rc-stat .s-value.green { color: var(--green); }
+.rc-stat .s-value.cyan { color: var(--cyan); }
+.rc-stat .s-value.gold { color: var(--gold); }
+
+.rc-arrow {
+  position: absolute; bottom: 28px; right: 28px; font-size: 20px; color: var(--text-dim);
+  transition: all 0.3s;
 }
-.card-stat .cs-label { font-size: 10px; color: var(--text-dim); text-transform: uppercase; letter-spacing: 0.5px; }
-.card-stat .cs-value { font-size: 18px; font-weight: 700; margin-top: 1px; }
-.card-stat .cs-value.green { color: var(--green); }
-.card-stat .cs-value.cyan { color: var(--cyan); }
-.card-stat .cs-value.purple { color: var(--purple); }
-.card-stat .cs-value.gold { color: var(--gold); }
+.report-card:hover .rc-arrow { color: var(--green); transform: translateX(4px); }
 
-.card-date { font-size: 12px; color: var(--text-dim); border-top: 1px solid var(--border); padding-top: 12px; display: flex; align-items: center; gap: 6px; }
+/* Coming soon card */
+.report-card.coming-soon { opacity: 0.5; border-style: dashed; }
+.report-card.coming-soon:hover { opacity: 0.7; transform: translateY(-2px); }
 
-/* Empty state */
-.empty-state {
-  text-align: center; padding: 60px;
-  background: var(--card); border: 1px dashed var(--border); border-radius: var(--radius);
-}
-.empty-state .es-icon { font-size: 48px; margin-bottom: 16px; }
-.empty-state .es-title { font-size: 18px; font-weight: 600; margin-bottom: 8px; }
-.empty-state .es-desc { font-size: 14px; color: var(--text-dim); }
+/* Footer */
+footer { padding: 40px 24px; text-align: center; color: var(--text-dim); font-size: 13px; border-top: 1px solid var(--border); }
+footer a { color: var(--green); text-decoration: none; }
 
 /* Scroll reveal */
 .reveal { opacity: 0; transform: translateY(30px); transition: all 0.7s cubic-bezier(0.23,1,0.32,1); }
 .reveal.visible { opacity: 1; transform: translateY(0); }
 
-footer { padding: 40px 24px; text-align: center; color: var(--text-dim); font-size: 13px; border-top: 1px solid var(--border); }
+/* Empty state */
+.empty-state {
+  text-align: center; padding: 60px 24px; color: var(--text-dim);
+  border: 2px dashed var(--border); border-radius: var(--radius); margin: 20px 0;
+}
+.empty-state .es-icon { font-size: 48px; margin-bottom: 16px; }
+.empty-state h3 { font-size: 18px; margin-bottom: 8px; color: var(--text); }
+.empty-state p { font-size: 14px; max-width: 400px; margin: 0 auto; }
+.empty-state code {
+  display: inline-block; margin-top: 16px; padding: 8px 16px;
+  background: rgba(0,0,0,0.4); border: 1px solid var(--border); border-radius: 8px;
+  font-family: 'Fira Code', 'Consolas', monospace; font-size: 13px; color: var(--green);
+}
 </style>
 </head>
 <body>
@@ -174,147 +190,149 @@ footer { padding: 40px 24px; text-align: center; color: var(--text-dim); font-si
 <div class="bg-glow1"></div>
 <div class="bg-glow2"></div>
 
+<!-- HERO -->
 <div class="hero">
-  <div class="hero-badge"><span class="dot"></span> Public Benchmark Portfolio</div>
-  <h1>AI Reports<small>Local LLM benchmarking on real hardware</small></h1>
-  <p class="hero-sub">Standardized evaluations of quantized models for tool-calling, agent autonomy, and production readiness — run on GB10, consumer GPUs, and the DGX Spark.</p>
-  <div class="stats-row" id="heroStats"></div>
+  <div class="hero-badge"><span class="dot"></span> Local LLM Evaluation · GPU Benchmarks · Edge AI</div>
+  <h1>AI Benchmark<br>Reports</h1>
+  <p class="hero-sub">Interactive benchmark reports for local LLM inference, quantization, tool-calling, and GPU performance — all running on consumer and edge hardware.</p>
+  <div class="hero-stats" id="heroStats">
+    <div class="stat-pill"><div class="sp-num" id="statReports">1</div><div class="sp-label">Reports</div></div>
+    <div class="stat-pill"><div class="sp-num" id="statModels">11</div><div class="sp-label">Models Tested</div></div>
+    <div class="stat-pill"><div class="sp-num" id="statScenarios">79</div><div class="sp-label">Scenarios</div></div>
+    <div class="stat-pill"><div class="sp-num" id="statVariants">11</div><div class="sp-label">Variants</div></div>
+  </div>
 </div>
 
-<section>
+<!-- REPORTS GRID -->
+<section class="reports-section reveal">
   <div class="container">
-    <h2 class="section-title">Benchmark <span class="accent">Reports</span></h2>
-    <p class="section-sub">Click any card to view the full report.</p>
-    <div id="reportGrid" class="report-grid"></div>
+    <div class="reports-header">
+      <h2>All <span class="accent">Reports</span></h2>
+      <div class="filter-info">Sorted by date · newest first</div>
+    </div>
+    <div class="reports-grid" id="reportsGrid"></div>
+    <div class="empty-state" id="emptyState" style="display:none;">
+      <div class="es-icon">📂</div>
+      <h3>No reports yet</h3>
+      <p>Add a new folder with an <code>index.html</code> inside and register it in the reports array at the top of this file.</p>
+    </div>
   </div>
 </section>
 
 <footer>
-  <p>AI Reports · Hermes Agent · All benchmarks reproducible with tool-eval-bench</p>
+  <p>Hosted on GitHub Pages · <a href="https://github.com/Mikehutu">GitHub</a> · Powered by local GPU clusters</p>
 </footer>
 
 <script>
-// ============ REPORT REGISTRY ============
-// Add new reports here. Cards auto-sort by date (newest first).
-const REPORTS = [
+// ============================================================
+//  REPORT REGISTRY — Add new reports here
+//  Just copy the template object and fill in the fields.
+//  The folder name must match the subfolder in your repo.
+//
+//  {
+//    folder: 'bonsai-27b-benchmarks',   ← subfolder name (URL path)
+//    icon: '🎋',                         ← emoji or short text
+//    iconColor: 'green',                 ← green | cyan | purple | gold
+//    title: 'Bonsai 27B Benchmarks',     ← display title
+//    desc: 'Short description...',       ← 1-2 sentence summary
+//    date: '2026-07-17',                 ← YYYY-MM-DD
+//    tags: ['Bonsai', 'Q1', 'Ternary'],  ← tag chips
+//    stats: [                            ← up to 3 highlight stats
+//      { label: 'Top Score', value: '90', color: 'green' },
+//      { label: 'Models', value: '11', color: 'cyan' },
+//      { label: 'Scenarios', value: '79', color: 'gold' },
+//    ]
+//  }
+// ============================================================
+
+const reports = [
   {
     folder: 'bonsai-27b-benchmarks',
     icon: '🎋',
     iconColor: 'green',
-    title: 'Bonsai 27B + Comparison Models',
-    desc: 'Comprehensive 79-scenario benchmark across 11 model variants including Bonsai Q1_0/Ternary Q2_0, Qwen3.6 35B/27B, Gemma-4-12B, Gemma 4 E4B, and DiffusionGemma-26B — on NVIDIA GB10.',
+    title: 'Bonsai 27B — Benchmark Results',
+    desc: 'Comprehensive evaluation of 11 quantized LLM variants for local tool-calling, agent autonomy, and Finnish localization on NVIDIA GB10 hardware. Includes Bonsai 1-bit, ternary, DSPARK speculative decoding, and 5 comparison models.',
     date: '2026-07-17',
-    tags: ['Bonsai', 'Qwen3.6', 'Gemma-4', 'DiffusionGemma', 'llama.cpp', 'vllm'],
+    tags: ['Bonsai 27B', 'Q1_0', 'Ternary Q2_0', 'DSPARK', 'Qwen3.6', 'Gemma-4', 'DiffusionGemma', 'GB10'],
     stats: [
-      { label: 'Top Score', value: '90', color: 'gold' },
-      { label: 'Variants', value: '11', color: 'green' },
-      { label: 'Best Value', value: '85', color: 'cyan' },
-      { label: 'Fastest Turn', value: '0.69s', color: 'purple' },
+      { label: 'Top Score', value: '90', color: 'green' },
+      { label: 'Models', value: '11', color: 'cyan' },
+      { label: 'Scenarios', value: '79', color: 'gold' },
     ],
+    featured: true,
   },
+  // ── TEMPLATE: Copy this block to add a new report ──
+  // {
+  //   folder: 'qwen-finetune-eval',
+  //   icon: '🔧',
+  //   iconColor: 'purple',
+  //   title: 'Qwen Fine-Tune Evaluation',
+  //   desc: 'Evaluation of fine-tuned Qwen models for tool-calling and Finnish localization.',
+  //   date: '2026-08-01',
+  //   tags: ['Qwen', 'Fine-tune', 'LoRA'],
+  //   stats: [
+  //     { label: 'Score', value: '—', color: 'green' },
+  //     { label: 'Models', value: '—', color: 'cyan' },
+  //   ],
+  //   featured: false,
+  // },
 ];
 
-// ============ RENDER ============
-function computeStats(reports) {
-  const uniqueModels = new Set();
-  const uniqueTags = new Set();
-  let totalScenarios = 0;
-  let totalVariants = 0;
+// ============================================================
+//  RENDER LOGIC — No need to edit below this line
+// ============================================================
 
-  reports.forEach(r => {
-    r.tags.forEach(t => uniqueTags.add(t));
-    if (r.stats) {
-      r.stats.forEach(s => {
-        if (s.label === 'Variants') totalVariants += parseInt(s.value) || 0;
-      });
-    }
-    // Count models from tags
-    ['Qwen3.6','Gemma','Bonsai','DiffusionGemma'].forEach(m => {
-      if (r.tags.includes(m)) uniqueModels.add(m);
-    });
-  });
+function renderReports() {
+  const grid = document.getElementById('reportsGrid');
+  const empty = document.getElementById('emptyState');
 
-  return {
-    reports: reports.length,
-    variants: totalVariants || '—',
-    tags: uniqueTags.size,
-    models: uniqueModels.size || '—',
-  };
-}
-
-function renderStats() {
-  const s = computeStats(REPORTS);
-  const container = document.getElementById('heroStats');
-  const items = [
-    { num: s.reports, label: 'Reports' },
-    { num: s.variants, label: 'Model Variants' },
-    { num: s.models || '—', label: 'Model Families' },
-    { num: '79', label: 'Scenarios' },
-  ];
-  container.innerHTML = items.map(i => `
-    <div class="stat-pill">
-      <div class="sp-num">${i.num}</div>
-      <div class="sp-label">${i.label}</div>
-    </div>
-  `).join('');
-}
-
-function renderCards() {
-  const grid = document.getElementById('reportGrid');
-
-  if (REPORTS.length === 0) {
-    grid.innerHTML = `
-      <div class="empty-state">
-        <div class="es-icon">📊</div>
-        <div class="es-title">No reports yet</div>
-        <div class="es-desc">Add your first benchmark report to the registry above.</div>
-      </div>
-    `;
+  if (reports.length === 0) {
+    grid.style.display = 'none';
+    empty.style.display = 'block';
     return;
   }
 
-  const sorted = [...REPORTS].sort((a, b) => b.date.localeCompare(a.date) || a.title.localeCompare(b.title));
+  // Sort by date descending
+  const sorted = [...reports].sort((a, b) => new Date(b.date) - new Date(a.date));
 
   grid.innerHTML = sorted.map(r => {
-    const tagColors = { green: 'tag-green', cyan: 'tag-cyan', purple: 'tag-purple', gold: 'tag-gold' };
-    const tagsHtml = (r.tags || []).map(t => {
-      const color = t.includes('Bonsai') ? 'tag-cyan' :
-                    t.includes('Qwen') ? 'tag-gold' :
-                    t.includes('Gemma') ? 'tag-purple' :
-                    t.includes('Diffusion') ? 'tag-cyan' : 'tag-green';
-      return `<span class="tag ${color}">${t}</span>`;
-    }).join('');
-
+    const tagsHtml = (r.tags || []).map(t => `<span class="tag">${t}</span>`).join('');
     const statsHtml = (r.stats || []).map(s => `
-      <div class="card-stat">
-        <div class="cs-label">${s.label}</div>
-        <div class="cs-value ${s.color || 'green'}">${s.value}</div>
+      <div class="rc-stat">
+        <div class="s-label">${s.label}</div>
+        <div class="s-value ${s.color || ''}">${s.value}</div>
       </div>
     `).join('');
 
-    const iconColors = { green: '#00ff88', cyan: '#00ddff', purple: '#a855f7', gold: '#ffaa00' };
+    const dateStr = new Date(r.date).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
 
     return `
-    <div class="report-card" data-href="${r.folder}/" onclick="location.href=this.dataset.href">
-      <span class="card-icon" style="color:${iconColors[r.iconColor] || '#00ff88'}">${r.icon}</span>
-      <div class="card-title">${r.title}</div>
-      <div class="card-desc">${r.desc}</div>
-      <div class="card-tags">${tagsHtml}</div>
-      <div class="card-stats">${statsHtml}</div>
-      <div class="card-date">📅 ${r.date}</div>
-    </div>`;
+      <a class="report-card" href="./${r.folder}/">
+        <div class="rc-top">
+          <div class="rc-icon ${r.iconColor || 'green'}">${r.icon || '📄'}</div>
+          <div class="rc-date">${dateStr}</div>
+        </div>
+        <div class="rc-title">${r.title}</div>
+        <div class="rc-desc">${r.desc}</div>
+        <div class="rc-tags">${tagsHtml}</div>
+        <div class="rc-stats">${statsHtml}</div>
+        <div class="rc-arrow">→</div>
+      </a>
+    `;
   }).join('');
+
+  // Update hero stats
+  document.getElementById('statReports').textContent = reports.length;
 }
 
-// ============ SCROLL REVEAL ============
+// Scroll reveal
 const observer = new IntersectionObserver((entries) => {
   entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
 }, { threshold: 0.1 });
 document.querySelectorAll('section').forEach(s => { s.classList.add('reveal'); observer.observe(s); });
 
-// ============ INIT ============
-renderStats();
-renderCards();
+// Init
+renderReports();
 </script>
 </body>
 </html>
