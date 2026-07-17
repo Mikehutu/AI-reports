@@ -47,6 +47,5 @@ All benchmarks use [tool-eval-bench](https://github.com/Mikehutu/tool-eval-bench
 
 | Machine | Spec | Used For |
 |---|---|---|
-| **gx10-b** | NVIDIA GB10, 128 GB unified VRAM | Bonsai, Qwen, Gemma benchmarks via llama.cpp / PrismML fork |
-| **gx10-b** | DGX Spark, 121 GB VRAM | DiffusionGemma via vllm (Docker) |
-| **minisforum** | AI X1 Pro WSL | Local development |
+| **NVIDIA GB10** | 128 GB unified VRAM | Bonsai benchmarks via llama.cpp |
+| **DGX Spark** | 121 GB VRAM | DiffusionGemma via vllm |

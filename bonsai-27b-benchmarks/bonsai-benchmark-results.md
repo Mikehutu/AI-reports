@@ -1,6 +1,6 @@
 # Bonsai 27B — Benchmark Results
 
-> **Enclosure:** `/mnt/ugreen/bonsai/` · **Engine:** PrismML llama.cpp fork (b9591, CUDA) · **Host:** gx10-b (NVIDIA GB10, 128 GB unified VRAM)
+> **Hardware:** NVIDIA GB10 (128 GB unified VRAM)
 > **Benchmark Suite:** [tool-eval-bench](https://github.com/Mikehutu/tool-eval-bench) v2.1.0 (74 TC + 10 FI scenarios = **79 run**)
 
 ---
@@ -167,7 +167,7 @@ The drafter quality is lossless in theory, but in practice the extra latency per
 tensor 'output_norm.weight' has offset 357580800, expected 337715200
 ```
 
-**Root cause:** GGUF V3 serializer miscalculated tensor offsets — upstream converter bug, not download corruption. Needs re-export from PrismML.
+**Root cause:** GGUF V3 serializer miscalculated tensor offsets — upstream converter bug, not download corruption. Needs re-export from the converter.
 
 **Would be valuable:** Highest-quality ternary variant (group size 64 vs 128). ~6% larger file for potentially meaningful accuracy improvement — the one gap in the ternary family.
 
@@ -341,27 +341,25 @@ The uncensored nature is a double-edged sword. While generation speed is excelle
 
 ### Benchmark Reports
 
-| Run ID | Model | Suite | Score | File |
-|---|---|---|---|---|
-| `18890c29` | Q1_0 | Full (79) — **first run, server crashed** | 46/100 | `T06-35-32.*.md` |
-| `1d038844` | Q1_0 | Short (15 TC) | 87/100 | `T06-45-45.*.md` |
-| `c60528e1` | Ternary Q2_0 | Short (15 TC) | 93/100 | `T06-51-29.*.md` |
-| `397bd353` | Ternary Q2_0 | Finnish (10 FI) | 90/100 | `T06-57-07.*.md` |
-| `14f3e171` | Ternary + dspark | Short (15 TC) | 93/100 | `T08-37-49.*.md` |
-| `026bf8e4` | Ternary Q2_0 | **Full (79)** | **85/100** | `T10-01-39.*.md` |
-| `9c00f91e` | Q1_0 | **Full (79) re-run** | **81/100** | `T13-21-44.*.md` |
-| `db7e9043` | Q1_0 | Finnish (10 FI) | 85 Quality | `T13-56-52.*.md` |
-| `4484b895` | Q1_0 + dspark | Short (15 TC) | 87/100 | `T14-03-24.*.md` |
-| `dc49e09d` | Ternary + dspark | **Full (79)** | **77 Quality** | `T14-15-33.*.md` |
-| `81ee7698` | Ternary + dspark | Finnish (10 FI) | 85 Quality | `T15-34-50.*.md` |
-| `569a84d0` | Gemma 4 E4B | Short (15 TC) | 83/100 | `T19-56-09.*.md` |
-| `16eb432f` | Gemma 4 E4B | **Full (79)** | **69/100** | `T20-10-57.*.md` |
-| `5a0ed5cc` | **Qwen3.6 35B A3B UD** | **Full (79) ⭐** | **90/100** | `T22-22-37.*.md` |
-| `a050bcdb` | **Gemma-4-12B Obliterated Q4_K_M** | **Full (79)** | **85/100** | `2026-07-17T10-52-20.*.md` |
-| `n/a` | **Qwen3.6-27B Aggressive Q8_K_P** | **Full (79)** | **85/100** | `qwen3.6-27b/` dir |
-| `n/a` | **DiffusionGemma-26B NVFP4** | **Full (79)** | **78/100** | `diffusiongemma/` dir |
+| Run ID | Model | Suite | Score |
+|---|---|---|
+| `18890c29` | Q1_0 | Full (79) — **first run, server crashed** | 46/100 |
+| `1d038844` | Q1_0 | Short (15 TC) | 87/100 |
+| `c60528e1` | Ternary Q2_0 | Short (15 TC) | 93/100 |
+| `397bd353` | Ternary Q2_0 | Finnish (10 FI) | 90/100 |
+| `14f3e171` | Ternary + dspark | Short (15 TC) | 93/100 |
+| `026bf8e4` | Ternary Q2_0 | **Full (79)** | **85/100** |
+| `9c00f91e` | Q1_0 | **Full (79) re-run** | **81/100** |
+| `db7e9043` | Q1_0 | Finnish (10 FI) | 85 Quality |
+| `4484b895` | Q1_0 + dspark | Short (15 TC) | 87/100 |
+| `dc49e09d` | Ternary + dspark | **Full (79)** | **77 Quality** |
+| `81ee7698` | Ternary + dspark | Finnish (10 FI) | 85 Quality |
+| `569a84d0` | Gemma 4 E4B | Short (15 TC) | 83/100 |
+| `16eb432f` | Gemma 4 E4B | **Full (79)** | **69/100** |
+| `5a0ed5cc` | **Qwen3.6 35B A3B UD** | **Full (79) ⭐** | **90/100** |
+| `a050bcdb` | **Gemma-4-12B Obliterated Q4_K_M** | **Full (79)** | **85/100** |
 
-**All reports:** `/mnt/ugreen/bonsai/benchmarks/runs/2026/07/`
+> **Reports:** Stored under `bonsai/benchmarks/runs/`
 
 ---
 

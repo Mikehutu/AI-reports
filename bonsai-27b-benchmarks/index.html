@@ -321,9 +321,7 @@ footer { padding: 60px 24px; text-align: center; color: var(--text-dim); font-si
   <h1>Bonsai 27B<br>Benchmark Results</h1>
   <p class="hero-sub">Comprehensive evaluation of quantized LLM variants for local tool-calling, agent autonomy, and Finnish localization on NVIDIA GB10 hardware.</p>
   <div class="hero-meta">
-    <div class="hero-meta-item"><div class="label">Engine</div><div class="val">PrismML llama.cpp (b9591)</div></div>
-    <div class="hero-meta-item"><div class="label">Host</div><div class="val">gx10-b · GB10 · 128GB</div></div>
-    <div class="hero-meta-item"><div class="label">Enclosure</div><div class="val">/mnt/ugreen/bonsai/</div></div>
+    <div class="hero-meta-item"><div class="label">Hardware</div><div class="val">NVIDIA GB10 · 128 GB VRAM</div></div>
     <div class="hero-meta-item"><div class="label">Suite</div><div class="val">tool-eval-bench v2.1.0</div></div>
   </div>
   <div class="hero-cards">
@@ -454,7 +452,7 @@ footer { padding: 60px 24px; text-align: center; color: var(--text-dim); font-si
       <div class="wb-icon">🎋</div>
       <div class="wb-text">
         <div class="wb-title">Benchmark: Bonsai 27B Variants</div>
-        <div class="wb-desc">6 variants benchmarked — 1-bit Q1_0 (3.6 GB) through Ternary Q2_0 (7.2 GB), plus DSPARK speculative decoding variants and the corrupt Q2_g64. Hosted on gx10-b (NVIDIA GB10).</div>
+        <div class="wb-desc">6 variants benchmarked — 1-bit Q1_0 (3.6 GB) through Ternary Q2_0 (7.2 GB), plus DSPARK speculative decoding variants and the corrupt Q2_g64. Hosted on NVIDIA GB10 with 128 GB unified VRAM.</div>
       </div>
     </div>
 
@@ -487,7 +485,7 @@ footer { padding: 60px 24px; text-align: center; color: var(--text-dim); font-si
     <p class="section-sub">Complete record of all 16 benchmark runs with run IDs and report files.</p>
     <div class="table-wrap run-log">
       <table>
-        <thead><tr><th>Run ID</th><th>Model</th><th>Suite</th><th>Score</th><th>File</th></tr></thead>
+        <thead><tr><th>Run ID</th><th>Model</th><th>Suite</th><th>Score</th></tr></thead>
         <tbody id="runLogBody"></tbody>
       </table>
     </div>
@@ -495,8 +493,7 @@ footer { padding: 60px 24px; text-align: center; color: var(--text-dim); font-si
 </section>
 
 <footer>
-  <p>Generated: 2026-07-17 · Hermes Agent · Bonsai 27B Benchmark · 6 Bonsai variants benchmarked on gx10-b (NVIDIA GB10)</p>
-  <p>Host: gx10-b (NVIDIA GB10, 128 GB unified VRAM) · Engine: PrismML llama.cpp fork (b9591, CUDA)</p>
+  <p>Generated: 2026-07-17 · Hermes Agent · Bonsai 27B Benchmark · 6 variants benchmarked on NVIDIA GB10 (128 GB unified VRAM)</p>
 </footer>
 
 <script>
@@ -551,17 +548,17 @@ const useCases = [
 ];
 
 const runLog = [
-  ['18890c29', 'Q1_0', 'Full (79) — first run, server crashed', '46/100', 'T06-35-32'],
-  ['1d038844', 'Q1_0', 'Short (15 TC)', '87/100', 'T06-45-45'],
-  ['c60528e1', 'Ternary Q2_0', 'Short (15 TC)', '93/100', 'T06-51-29'],
-  ['397bd353', 'Ternary Q2_0', 'Finnish (10 FI)', '90/100', 'T06-57-07'],
-  ['14f3e171', 'Ternary + dspark', 'Short (15 TC)', '93/100', 'T08-37-49'],
-  ['026bf8e4', 'Ternary Q2_0', 'Full (79)', '85/100', 'T10-01-39'],
-  ['9c00f91e', 'Q1_0', 'Full (79) re-run', '81/100', 'T13-21-44'],
-  ['db7e9043', 'Q1_0', 'Finnish (10 FI)', '85 Quality', 'T13-56-52'],
-  ['4484b895', 'Q1_0 + dspark', 'Short (15 TC)', '87/100', 'T14-03-24'],
-  ['dc49e09d', 'Ternary + dspark', 'Full (79)', '77 Quality', 'T14-15-33'],
-  ['81ee7698', 'Ternary + dspark', 'Finnish (10 FI)', '85 Quality', 'T15-34-50'],
+  ['18890c29', 'Q1_0', 'Full (79) — first run, server crashed', '46/100'],
+  ['1d038844', 'Q1_0', 'Short (15 TC)', '87/100'],
+  ['c60528e1', 'Ternary Q2_0', 'Short (15 TC)', '93/100'],
+  ['397bd353', 'Ternary Q2_0', 'Finnish (10 FI)', '90/100'],
+  ['14f3e171', 'Ternary + dspark', 'Short (15 TC)', '93/100'],
+  ['026bf8e4', 'Ternary Q2_0', 'Full (79)', '85/100'],
+  ['9c00f91e', 'Q1_0', 'Full (79) re-run', '81/100'],
+  ['db7e9043', 'Q1_0', 'Finnish (10 FI)', '85 Quality'],
+  ['4484b895', 'Q1_0 + dspark', 'Short (15 TC)', '87/100'],
+  ['dc49e09d', 'Ternary + dspark', 'Full (79)', '77 Quality'],
+  ['81ee7698', 'Ternary + dspark', 'Finnish (10 FI)', '85 Quality'],
 ];
 
 // ============ RENDER MODEL CARDS ============
@@ -644,8 +641,7 @@ function renderRunLog() {
     else if (score.includes('69') || score.includes('77')) cls = 'score-70';
     else if (score.includes('78') || score.includes('81') || score.includes('85 Quality')) cls = 'score-80';
     else if (score.includes('85')) cls = 'score-85';
-    else if (score.includes('90') || score.includes('93')) cls = 'score-90';
-    return `<tr><td><code style="color:var(--cyan)">${r[0]}</code></td><td>${r[1]}</td><td>${r[2]}</td><td><span class="score-badge ${cls}">${score}</span></td><td><code style="font-size:11px;color:var(--text-dim)">${r[4]}</code></td></tr>`;
+    return `<tr><td><code>${r[0].slice(0,8)}</code></td><td><strong>${r[1]}</strong></td><td>${r[2]}</td><td><span class="score-badge ${cls}">${r[3]}</span></td></tr>`;
   }).join('');
 }
 
