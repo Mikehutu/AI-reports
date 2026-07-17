@@ -552,28 +552,28 @@ const models = [
   },
   {
     name: 'Qwen3.6 35B A3B UD', label: 'Overall Winner ⭐', size: '37 GB', score: 90, short: null, finnish: null,
-    medTurn: '1.5s', tps: '— t/s', promptTps: '—', deploy: 85, resp: null,
+    medTurn: '1.5s', tps: '—', promptTps: '—', deploy: 85, resp: null,
     safety: 80, weakest: 'Tool Selection (67%)', tags: ['Highest Score', 'Fastest', 'Best Deploy'],
     cats: catScores.qwen35b, color: '#ffaa00',
     verdict: 'Highest full score (90/100), fastest (1.5s turn, 6 min run). Best deployability. Requires 37 GB — GB10 or similar needed.'
   },
   {
     name: 'Gemma-4-12B Q4_K_M', label: 'Obliterated 12B', size: '6.9 GB', score: 85, short: null, finnish: null,
-    medTurn: '1.6s', tps: '—', promptTps: '—', deploy: 81, resp: 71,
+    medTurn: '1.6s', tps: '16.6 t/s', promptTps: '—', deploy: 81, resp: 71,
     safety: 73, weakest: 'Safety & Boundaries (73%)', tags: ['Best Contender', 'Fast'],
     cats: catScores.gemma12b, color: '#a855f7',
     verdict: 'Matches best Bonsai at similar size. Ties Qwen3.6-27B at 1/4 the size and 5× the speed. Great for general-purpose local AI.'
   },
   {
     name: 'Qwen3.6-27B Aggressive', label: 'Aggressive 27B', size: '30 GB', score: 85, short: null, finnish: null,
-    medTurn: '8.7s', tps: '—', promptTps: '—', deploy: 65, resp: 17,
+    medTurn: '8.7s', tps: '4.9 t/s', promptTps: '—', deploy: 65, resp: 17,
     safety: 63, weakest: 'Restraint & Refusal (50%)', tags: ['Slowest', 'Safety issues'],
     cats: catScores.qwen27b, color: '#ec4899',
     verdict: 'Disappointing for 30 GB. Same score as 6.9 GB Gemma-4-12B but 5× slower. PII leakage and authority escalation issues.'
   },
   {
     name: 'DiffusionGemma-26B NVFP4', label: 'Speed Champion', size: '17.5 GB', score: 78, short: null, finnish: null,
-    medTurn: '0.69s', tps: '—', promptTps: '—', deploy: 82, resp: 90,
+    medTurn: '0.69s', tps: '42.7 t/s', promptTps: '—', deploy: 82, resp: 90,
     safety: 67, weakest: 'Structured Output (42%)', tags: ['Fastest Turn', 'Sub-second'],
     cats: catScores.diffgemma, color: '#00ddff',
     verdict: 'Fastest model tested (0.69s median turn). Diffusion architecture trades quality for speed. Best for speed-critical single-turn apps.'
