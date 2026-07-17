@@ -317,7 +317,7 @@ footer { padding: 60px 24px; text-align: center; color: var(--text-dim); font-si
 
 <!-- HERO -->
 <div class="hero">
-  <div class="hero-badge"><span class="dot"></span> Benchmark Suite v2.1.0 · 79 Scenarios · 11 Variants</div>
+  <div class="hero-badge"><span class="dot"></span> Benchmark Suite v2.1.0 · 79 Scenarios · 6 Variants</div>
   <h1>Bonsai 27B<br>Benchmark Results</h1>
   <p class="hero-sub">Comprehensive evaluation of quantized LLM variants for local tool-calling, agent autonomy, and Finnish localization on NVIDIA GB10 hardware.</p>
   <div class="hero-meta">
@@ -327,12 +327,6 @@ footer { padding: 60px 24px; text-align: center; color: var(--text-dim); font-si
     <div class="hero-meta-item"><div class="label">Suite</div><div class="val">tool-eval-bench v2.1.0</div></div>
   </div>
   <div class="hero-cards">
-    <div class="float-card gold">
-      <span class="icon">⭐</span>
-      <div class="title">Overall Winner</div>
-      <div class="score">90</div>
-      <div class="desc">Qwen3.6 35B A3B · 37GB · 1.5s turn</div>
-    </div>
     <div class="float-card green">
       <span class="icon">🎋</span>
       <div class="title">Best Bonsai</div>
@@ -340,10 +334,10 @@ footer { padding: 60px 24px; text-align: center; color: var(--text-dim); font-si
       <div class="desc">Ternary Q2_0 · 7.2GB · 5.7s turn</div>
     </div>
     <div class="float-card cyan">
-      <span class="icon">⚡</span>
-      <div class="title">Speed King</div>
-      <div class="score">78</div>
-      <div class="desc">DiffusionGemma · 17.5GB · 0.69s turn</div>
+      <span class="icon">☀</span>
+      <div class="title">Lightest</div>
+      <div class="score">81</div>
+      <div class="desc">Q1_0 · 3.6GB · 5.1s turn</div>
     </div>
   </div>
 </div>
@@ -352,14 +346,14 @@ footer { padding: 60px 24px; text-align: center; color: var(--text-dim); font-si
 <section>
   <div class="container">
     <h2 class="section-title">Quick <span class="accent">Reference</span></h2>
-    <p class="section-sub">All 11 benchmarked variants at a glance — scores, sizes, and key notes.</p>
+    <p class="section-sub">All 6 Bonsai variants at a glance — scores, sizes, and key notes.</p>
     <div class="stats-row">
-      <div class="stat-pill"><div class="sp-num">11</div><div class="sp-label">Variants</div></div>
+      <div class="stat-pill"><div class="sp-num">6</div><div class="sp-label">Variants</div></div>
       <div class="stat-pill"><div class="sp-num">79</div><div class="sp-label">Scenarios</div></div>
-      <div class="stat-pill"><div class="sp-num">90</div><div class="sp-label">Top Score</div></div>
+      <div class="stat-pill"><div class="sp-num">85</div><div class="sp-label">Top Score</div></div>
       <div class="stat-pill"><div class="sp-num">3.6</div><div class="sp-label">Min GB</div></div>
-      <div class="stat-pill"><div class="sp-num">37</div><div class="sp-label">Max GB</div></div>
-      <div class="stat-pill"><div class="sp-num">0.69s</div><div class="sp-label">Fastest Turn</div></div>
+      <div class="stat-pill"><div class="sp-num">9.1</div><div class="sp-label">Max GB</div></div>
+      <div class="stat-pill"><div class="sp-num">5.1s</div><div class="sp-label">Fastest Turn</div></div>
     </div>
     <div class="table-wrap">
       <table>
@@ -373,11 +367,6 @@ footer { padding: 60px 24px; text-align: center; color: var(--text-dim); font-si
           <tr><td><strong>Q1_0 + dspark</strong> (5.3 GB)</td><td><span class="score-badge score-90">87</span></td><td>—</td><td>—</td><td>Lossless speed, but 14.2s median turn hurts tool-calling</td></tr>
           <tr><td><strong>Ternary Q2_0</strong> (7.2 GB)</td><td><span class="score-badge score-90">93</span></td><td><span class="score-badge score-85">85</span></td><td><span class="score-badge score-90">90</span></td><td>Best overall — highest quality, clean full run</td></tr>
           <tr><td><strong>Ternary + dspark</strong> (9.1 GB)</td><td><span class="score-badge score-90">93</span></td><td><span class="score-badge score-80">77</span></td><td><span class="score-badge score-80">85</span></td><td>Quality drops in full run — 16.2s median turn causes timeouts</td></tr>
-          <tr><td><strong>Gemma 4 E4B</strong> (7.6 GB)</td><td><span class="score-badge score-80">83</span></td><td><span class="score-badge score-70">69</span></td><td>—</td><td>Uncensored — safety tanked (7 CRITICAL warnings)</td></tr>
-          <tr><td><strong>Qwen3.6 35B A3B</strong> (37 GB)</td><td>—</td><td><span class="score-badge score-90">90 ⭐</span></td><td>—</td><td>Highest full score — fastest (1.5s turn, 6 min), deployability 85</td></tr>
-          <tr><td><strong>Gemma-4-12B Q4_K_M</strong> (6.9 GB)</td><td>—</td><td><span class="score-badge score-85">85</span></td><td>—</td><td>Matches best Bonsai — 2 safety warnings, 1.6s med, 81 deploy</td></tr>
-          <tr><td><strong>Qwen3.6-27B Aggressive</strong> (30 GB)</td><td>—</td><td><span class="score-badge score-85">85</span></td><td>—</td><td>Same score as 12B but 5× slower (8.7s med), Deploy 65</td></tr>
-          <tr><td><strong>DiffusionGemma-26B NVFP4</strong> (17.5 GB)</td><td>—</td><td><span class="score-badge score-80">78</span></td><td>—</td><td>Fastest turn (0.69s med, Resp 90) but Structured Output 42%</td></tr>
           <tr><td><strong>DSPARK speed</strong></td><td>1.49× throughput</td><td>—</td><td>—</td><td>Useful for batch, hurts single-turn latency</td></tr>
           <tr><td><strong>Q2_g64</strong> (7.6 GB)</td><td><span class="score-badge score-60">❌</span></td><td><span class="score-badge score-60">❌</span></td><td><span class="score-badge score-60">❌</span></td><td>Corrupted GGUF — upstream converter bug</td></tr>
         </tbody>
@@ -428,13 +417,8 @@ footer { padding: 60px 24px; text-align: center; color: var(--text-dim); font-si
     <div class="chart-grid">
       <div class="chart-card">
         <div class="chart-title">Bonsai Variants — Category Radar</div>
-        <div class="chart-sub">Q1_0 vs Ternary Q2_0 vs Ternary+dspark</div>
+        <div class="chart-sub">Q1_0 vs Ternary Q2_0</div>
         <div class="chart-container"><canvas id="radarBonsai"></canvas></div>
-      </div>
-      <div class="chart-card">
-        <div class="chart-title">Comparison Models — Category Radar</div>
-        <div class="chart-sub">Qwen3.6 35B vs Gemma-4-12B vs Qwen3.6-27B vs DiffusionGemma</div>
-        <div class="chart-container"><canvas id="radarComparison"></canvas></div>
       </div>
     </div>
   </div>
@@ -467,10 +451,10 @@ footer { padding: 60px 24px; text-align: center; color: var(--text-dim); font-si
     <p class="section-sub">Deep-dive into each benchmarked variant with category breakdowns and verdicts.</p>
 
     <div class="winner-banner">
-      <div class="wb-icon">⭐</div>
+      <div class="wb-icon">🎋</div>
       <div class="wb-text">
-        <div class="wb-title">Overall Winner: Qwen3.6 35B A3B UD</div>
-        <div class="wb-desc">90/100 full score, fastest by far (1.5s median turn, 6 min total), best deployability (85/100). At 37 GB it requires a GB10 or similar hardware.</div>
+        <div class="wb-title">Benchmark: Bonsai 27B Variants</div>
+        <div class="wb-desc">6 variants benchmarked — 1-bit Q1_0 (3.6 GB) through Ternary Q2_0 (7.2 GB), plus DSPARK speculative decoding variants and the corrupt Q2_g64. Hosted on gx10-b (NVIDIA GB10).</div>
       </div>
     </div>
 
@@ -511,7 +495,7 @@ footer { padding: 60px 24px; text-align: center; color: var(--text-dim); font-si
 </section>
 
 <footer>
-  <p>Generated: 2026-07-17 · Hermes Agent · Bonsai 27B + Additional Models Benchmarking · All 11 variants benchmarked</p>
+  <p>Generated: 2026-07-17 · Hermes Agent · Bonsai 27B Benchmark · 6 Bonsai variants benchmarked on gx10-b (NVIDIA GB10)</p>
   <p>Host: gx10-b (NVIDIA GB10, 128 GB unified VRAM) · Engine: PrismML llama.cpp fork (b9591, CUDA)</p>
 </footer>
 
@@ -522,10 +506,6 @@ const categories = ['Tool Sel.', 'Param Prec.', 'Multi-Step', 'Restraint', 'Erro
 const catScores = {
   q1_0:        [100, 67, 75, 100, 88, 100, 100, 100, 65, 83, 57, 88, 100, 83, 83],
   ternary:     [100,100, 88, 83, 88, 83, 100, 83, 70, 83, 90, 88, 83, 83, 83],
-  qwen35b:     [67, 100,100,100, 88, 100,100, 75, 85,100, 80,100,100, 83, 83],
-  gemma12b:    [100, 83, 75, 83, 88, 100,100, 83, 80,100, 73, 88, 83,100, 83],
-  qwen27b:     [100,100,100, 50, 88, 100,100, 83, 85,100, 63, 88, 67, 83,100],
-  diffgemma:   [100,100, 75, 83, 75, 89,100,100, 80, 83, 67, 62, 50,100, 42],
 };
 
 const models = [
@@ -550,41 +530,6 @@ const models = [
     cats: null, color: '#ff8800',
     verdict: 'Lossless in theory but 16.2s median turn causes timeouts. DSPARK helps batch/streaming, not interactive tool-calling.'
   },
-  {
-    name: 'Qwen3.6 35B A3B UD', label: 'Overall Winner ⭐', size: '37 GB', score: 90, short: null, finnish: null,
-    medTurn: '1.5s', tps: '—', promptTps: '—', deploy: 85, resp: null,
-    safety: 80, weakest: 'Tool Selection (67%)', tags: ['Highest Score', 'Fastest', 'Best Deploy'],
-    cats: catScores.qwen35b, color: '#ffaa00',
-    verdict: 'Highest full score (90/100), fastest (1.5s turn, 6 min run). Best deployability. Requires 37 GB — GB10 or similar needed.'
-  },
-  {
-    name: 'Gemma-4-12B Q4_K_M', label: 'Obliterated 12B', size: '6.9 GB', score: 85, short: null, finnish: null,
-    medTurn: '1.6s', tps: '16.6 t/s', promptTps: '—', deploy: 81, resp: 71,
-    safety: 73, weakest: 'Safety & Boundaries (73%)', tags: ['Best Contender', 'Fast'],
-    cats: catScores.gemma12b, color: '#a855f7',
-    verdict: 'Matches best Bonsai at similar size. Ties Qwen3.6-27B at 1/4 the size and 5× the speed. Great for general-purpose local AI.'
-  },
-  {
-    name: 'Qwen3.6-27B Aggressive', label: 'Aggressive 27B', size: '30 GB', score: 85, short: null, finnish: null,
-    medTurn: '8.7s', tps: '4.9 t/s', promptTps: '—', deploy: 65, resp: 17,
-    safety: 63, weakest: 'Restraint & Refusal (50%)', tags: ['Slowest', 'Safety issues'],
-    cats: catScores.qwen27b, color: '#ec4899',
-    verdict: 'Disappointing for 30 GB. Same score as 6.9 GB Gemma-4-12B but 5× slower. PII leakage and authority escalation issues.'
-  },
-  {
-    name: 'DiffusionGemma-26B NVFP4', label: 'Speed Champion', size: '17.5 GB', score: 78, short: null, finnish: null,
-    medTurn: '0.69s', tps: '42.7 t/s', promptTps: '—', deploy: 82, resp: 90,
-    safety: 67, weakest: 'Structured Output (42%)', tags: ['Fastest Turn', 'Sub-second'],
-    cats: catScores.diffgemma, color: '#00ddff',
-    verdict: 'Fastest model tested (0.69s median turn). Diffusion architecture trades quality for speed. Best for speed-critical single-turn apps.'
-  },
-  {
-    name: 'Gemma 4 E4B', label: 'Uncensored E4B', size: '7.6 GB', score: 69, short: 83, finnish: null,
-    medTurn: '7.4s', tps: '44 t/s', promptTps: '—', deploy: 55, resp: null,
-    safety: null, weakest: 'Safety & Boundaries (CRITICAL)', tags: ['Safety risk', '7 warnings'],
-    cats: null, color: '#ff4466',
-    verdict: 'Uncensored nature tanked the score. 7 safety warnings including CRITICAL injection/authority failures. Worst deployability (55).'
-  },
 ];
 
 const failPatterns = [
@@ -603,7 +548,6 @@ const useCases = [
   { icon: '🔒', title: 'Sensitive data (PII/financial)', model: 'Neither alone', desc: 'Add validation layer — TC-60 injection gap is real' },
   { icon: '🤖', title: 'Always-on Slack/Discord bot', model: 'Q1_0', desc: 'Lower memory, cheaper GPU, always-on cost matters' },
   { icon: '🌙', title: 'Batch document analysis', model: 'Ternary Q2_0 ⭐', desc: 'Quality over speed, no latency constraint' },
-  { icon: '⚡', title: 'Speed-critical single-turn', model: 'DiffusionGemma-26B', desc: 'Sub-second responses, best for latency-first apps' },
 ];
 
 const runLog = [
@@ -618,12 +562,6 @@ const runLog = [
   ['4484b895', 'Q1_0 + dspark', 'Short (15 TC)', '87/100', 'T14-03-24'],
   ['dc49e09d', 'Ternary + dspark', 'Full (79)', '77 Quality', 'T14-15-33'],
   ['81ee7698', 'Ternary + dspark', 'Finnish (10 FI)', '85 Quality', 'T15-34-50'],
-  ['569a84d0', 'Gemma 4 E4B', 'Short (15 TC)', '83/100', 'T19-56-09'],
-  ['16eb432f', 'Gemma 4 E4B', 'Full (79)', '69/100', 'T20-10-57'],
-  ['5a0ed5cc', 'Qwen3.6 35B A3B UD', 'Full (79) ⭐', '90/100', 'T22-22-37'],
-  ['a050bcdb', 'Gemma-4-12B Obliterated', 'Full (79)', '85/100', '2026-07-17T10-52-20'],
-  ['n/a', 'Qwen3.6-27B Aggressive', 'Full (79)', '85/100', 'qwen3.6-27b/ dir'],
-  ['n/a', 'DiffusionGemma-26B NVFP4', 'Full (79)', '78/100', 'diffusiongemma/ dir'],
 ];
 
 // ============ RENDER MODEL CARDS ============
@@ -720,10 +658,10 @@ Chart.defaults.font.family = "'Segoe UI', system-ui, sans-serif";
 new Chart(document.getElementById('chartFullScores'), {
   type: 'bar',
   data: {
-    labels: ['Qwen3.6 35B', 'Ternary Q2_0', 'Gemma-4-12B', 'Qwen3.6-27B', 'Q1_0', 'Ternary+dspark', 'DiffGemma', 'Gemma 4 E4B'],
+    labels: ['Ternary Q2_0', 'Q1_0', 'Ternary+dspark'],
     datasets: [{
-      data: [90, 85, 85, 85, 81, 77, 78, 69],
-      backgroundColor: ['#00ff88','#00ddff','#a855f7','#ec4899','#00ff88','#ff8800','#00ddff','#ff4466'],
+      data: [85, 81, 77],
+      backgroundColor: ['#00ddff','#00ff88','#ff8800'],
       borderRadius: 8, borderSkipped: false,
     }]
   },
@@ -739,13 +677,8 @@ new Chart(document.getElementById('chartSpeedQuality'), {
   type: 'scatter',
   data: {
     datasets: [
-      { label: 'Qwen3.6 35B', data: [{x:1.5,y:90}], backgroundColor: '#ffaa00', pointRadius: 10 },
-      { label: 'Gemma-4-12B', data: [{x:1.6,y:85}], backgroundColor: '#a855f7', pointRadius: 10 },
-      { label: 'DiffGemma', data: [{x:0.69,y:78}], backgroundColor: '#00ddff', pointRadius: 10 },
       { label: 'Q1_0', data: [{x:5.1,y:81}], backgroundColor: '#00ff88', pointRadius: 10 },
       { label: 'Ternary Q2_0', data: [{x:5.7,y:85}], backgroundColor: '#00ddff', pointRadius: 10 },
-      { label: 'Gemma 4 E4B', data: [{x:7.4,y:69}], backgroundColor: '#ff4466', pointRadius: 10 },
-      { label: 'Qwen3.6-27B', data: [{x:8.7,y:85}], backgroundColor: '#ec4899', pointRadius: 10 },
       { label: 'Ternary+dspark', data: [{x:16.2,y:77}], backgroundColor: '#ff8800', pointRadius: 10 },
     ]
   },
@@ -769,11 +702,7 @@ new Chart(document.getElementById('chartSizeScore'), {
     datasets: [
       { label: 'Q1_0', data: [{x:3.6,y:81}], backgroundColor: '#00ff88', pointRadius: 10 },
       { label: 'Ternary Q2_0', data: [{x:7.2,y:85}], backgroundColor: '#00ddff', pointRadius: 10 },
-      { label: 'Gemma-4-12B', data: [{x:6.9,y:85}], backgroundColor: '#a855f7', pointRadius: 10 },
-      { label: 'Gemma 4 E4B', data: [{x:7.6,y:69}], backgroundColor: '#ff4466', pointRadius: 10 },
-      { label: 'DiffGemma', data: [{x:17.5,y:78}], backgroundColor: '#00ddff', pointRadius: 10 },
-      { label: 'Qwen3.6-27B', data: [{x:30,y:85}], backgroundColor: '#ec4899', pointRadius: 10 },
-      { label: 'Qwen3.6 35B', data: [{x:37,y:90}], backgroundColor: '#ffaa00', pointRadius: 10 },
+      { label: 'Ternary+dspark', data: [{x:9.1,y:77}], backgroundColor: '#ff8800', pointRadius: 10 },
     ]
   },
   options: {
@@ -793,10 +722,10 @@ new Chart(document.getElementById('chartSizeScore'), {
 new Chart(document.getElementById('chartShortScores'), {
   type: 'bar',
   data: {
-    labels: ['Ternary Q2_0', 'Ternary+dspark', 'Q1_0', 'Q1_0+dspark', 'Gemma 4 E4B'],
+    labels: ['Ternary Q2_0', 'Ternary+dspark', 'Q1_0'],
     datasets: [{
-      data: [93, 93, 87, 87, 83],
-      backgroundColor: ['#00ddff','#ff8800','#00ff88','#00cc6a','#ff4466'],
+      data: [93, 93, 87],
+      backgroundColor: ['#00ddff','#ff8800','#00ff88'],
       borderRadius: 8, borderSkipped: false,
     }]
   },
@@ -826,23 +755,7 @@ new Chart(document.getElementById('radarBonsai'), {
 });
 
 // Radar Comparison
-new Chart(document.getElementById('radarComparison'), {
-  type: 'radar',
-  data: {
-    labels: categories,
-    datasets: [
-      { label: 'Qwen3.6 35B', data: catScores.qwen35b, borderColor: '#ffaa00', backgroundColor: 'rgba(255,170,0,0.08)', pointBackgroundColor: '#ffaa00', borderWidth: 2 },
-      { label: 'Gemma-4-12B', data: catScores.gemma12b, borderColor: '#a855f7', backgroundColor: 'rgba(168,85,247,0.08)', pointBackgroundColor: '#a855f7', borderWidth: 2 },
-      { label: 'Qwen3.6-27B', data: catScores.qwen27b, borderColor: '#ec4899', backgroundColor: 'rgba(236,72,153,0.08)', pointBackgroundColor: '#ec4899', borderWidth: 2 },
-      { label: 'DiffGemma', data: catScores.diffgemma, borderColor: '#00ddff', backgroundColor: 'rgba(0,221,255,0.06)', pointBackgroundColor: '#00ddff', borderWidth: 2 },
-    ]
-  },
-  options: {
-    responsive: true, maintainAspectRatio: false,
-    plugins: { legend: { position: 'bottom', labels: { font: { size: 11 }, padding: 8 } } },
-    scales: { r: { beginAtZero: true, max: 100, grid: { color: 'rgba(255,255,255,0.08)' }, angleLines: { color: 'rgba(255,255,255,0.08)' }, pointLabels: { font: { size: 9 } } } }
-  }
-});
+// Removed — comparison models moved to separate report folders
 
 // DSPARK metrics
 new Chart(document.getElementById('chartDspark'), {

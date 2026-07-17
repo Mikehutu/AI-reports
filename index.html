@@ -251,16 +251,31 @@ const reports = [
     icon: '🎋',
     iconColor: 'green',
     title: 'Bonsai 27B — Benchmark Results',
-    desc: 'Comprehensive evaluation of 11 quantized LLM variants for local tool-calling, agent autonomy, and Finnish localization on NVIDIA GB10 hardware. Includes Bonsai 1-bit, ternary, DSPARK speculative decoding, and 5 comparison models.',
+    desc: 'Comprehensive evaluation of 6 quantized Bonsai 27B LLM variants for local tool-calling, agent autonomy, and Finnish localization on NVIDIA GB10 hardware. Includes Q1_0, Ternary Q2_0, and DSPARK speculative decoding variants.',
     date: '2026-07-17',
-    tags: ['Bonsai 27B', 'Q1_0', 'Ternary Q2_0', 'DSPARK', 'Qwen3.6', 'Gemma-4', 'DiffusionGemma', 'GB10'],
+    tags: ['Bonsai 27B', 'Q1_0', 'Ternary Q2_0', 'DSPARK', 'GB10'],
     stats: [
-      { label: 'Top Score', value: '90', color: 'green' },
-      { label: 'Models', value: '11', color: 'cyan' },
+      { label: 'Top Score', value: '85', color: 'green' },
+      { label: 'Variants', value: '6', color: 'cyan' },
       { label: 'Scenarios', value: '79', color: 'gold' },
     ],
     featured: true,
   },
+  // ── Coming Soon: Other model families ──
+  // {
+  //   folder: 'qwen3.6-35b-benchmark',
+  //   icon: '�­',
+  //   iconColor: 'gold',
+  //   title: 'Qwen3.6 35B — Benchmark Results',
+  //   desc: 'Coming soon. Full-suite evaluation of Qwen3.6 35B A3B UD.',
+  //   date: '2026-08-01',
+  //   tags: ['Qwen3.6', '35B', 'Q8_U'],
+  //   stats: [
+  //     { label: 'Score', value: '—', color: 'green' },
+  //     { label: 'Models', value: '—', color: 'cyan' },
+  //   ],
+  //   featured: false,
+  // },
   // ── TEMPLATE: Copy this block to add a new report ──
   // {
   //   folder: 'qwen-finetune-eval',
