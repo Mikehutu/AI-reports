@@ -197,9 +197,6 @@ footer a { color: var(--green); text-decoration: none; }
   <p class="hero-sub">Interactive benchmark reports for local LLM inference, quantization, tool-calling, and GPU performance — all running on consumer and edge hardware.</p>
   <div class="hero-stats" id="heroStats">
     <div class="stat-pill"><div class="sp-num" id="statReports">1</div><div class="sp-label">Reports</div></div>
-    <div class="stat-pill"><div class="sp-num" id="statModels">11</div><div class="sp-label">Models Tested</div></div>
-    <div class="stat-pill"><div class="sp-num" id="statScenarios">79</div><div class="sp-label">Scenarios</div></div>
-    <div class="stat-pill"><div class="sp-num" id="statVariants">11</div><div class="sp-label">Variants</div></div>
   </div>
 </div>
 
@@ -251,12 +248,12 @@ const reports = [
     icon: '🎋',
     iconColor: 'green',
     title: 'Bonsai 27B — Benchmark Results',
-    desc: 'Comprehensive evaluation of 6 quantized Bonsai 27B LLM variants for local tool-calling, agent autonomy, and Finnish localization on NVIDIA GB10 hardware. Includes Q1_0, Ternary Q2_0, and DSPARK speculative decoding variants.',
+    desc: 'Comprehensive evaluation of 3 core quantized Bonsai 27B LLM variants for local tool-calling, agent autonomy, and Finnish localization on NVIDIA GB10 hardware. Includes Q1_0, Ternary Q2_0, and DSPARK speculative decoding impact analysis.',
     date: '2026-07-17',
     tags: ['Bonsai 27B', 'Q1_0', 'Ternary Q2_0', 'DSPARK', 'GB10'],
     stats: [
       { label: 'Top Score', value: '85', color: 'green' },
-      { label: 'Variants', value: '6', color: 'cyan' },
+      { label: 'Variants', value: '3', color: 'cyan' },
       { label: 'Scenarios', value: '79', color: 'gold' },
     ],
     featured: true,

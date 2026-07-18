@@ -317,7 +317,7 @@ footer { padding: 60px 24px; text-align: center; color: var(--text-dim); font-si
 
 <!-- HERO -->
 <div class="hero">
-  <div class="hero-badge"><span class="dot"></span> Benchmark Suite v2.1.0 · 79 Scenarios · 6 Variants</div>
+  <div class="hero-badge"><span class="dot"></span> Benchmark Suite v2.1.0 · 79 Scenarios · 3 Core Variants</div>
   <h1>Bonsai 27B<br>Benchmark Results</h1>
   <p class="hero-sub">Comprehensive evaluation of quantized LLM variants for local tool-calling, agent autonomy, and Finnish localization on NVIDIA GB10 hardware.</p>
   <div class="hero-meta">
@@ -344,15 +344,16 @@ footer { padding: 60px 24px; text-align: center; color: var(--text-dim); font-si
 <section>
   <div class="container">
     <h2 class="section-title">Quick <span class="accent">Reference</span></h2>
-    <p class="section-sub">All 6 Bonsai variants at a glance — scores, sizes, and key notes.</p>
+    <p class="section-sub">3 core models benchmarked, alongside DSPARK speculative decoding impact analysis.</p>
     <div class="stats-row">
-      <div class="stat-pill"><div class="sp-num">6</div><div class="sp-label">Variants</div></div>
+      <div class="stat-pill"><div class="sp-num">3</div><div class="sp-label">Core Variants</div></div>
       <div class="stat-pill"><div class="sp-num">79</div><div class="sp-label">Scenarios</div></div>
       <div class="stat-pill"><div class="sp-num">85</div><div class="sp-label">Top Score</div></div>
       <div class="stat-pill"><div class="sp-num">3.6</div><div class="sp-label">Min GB</div></div>
       <div class="stat-pill"><div class="sp-num">9.1</div><div class="sp-label">Max GB</div></div>
       <div class="stat-pill"><div class="sp-num">5.1s</div><div class="sp-label">Fastest Turn</div></div>
     </div>
+    <h3 class="section-title" style="font-size:20px;font-weight:600;margin-bottom:16px">Table 1: Core Models Performance</h3>
     <div class="table-wrap">
       <table>
         <thead>
@@ -362,11 +363,25 @@ footer { padding: 60px 24px; text-align: center; color: var(--text-dim); font-si
         </thead>
         <tbody>
           <tr><td><strong>Q1_0</strong> (1-bit, 3.6 GB)</td><td><span class="score-badge score-90">87</span></td><td><span class="score-badge score-80">81</span></td><td><span class="score-badge score-80">85</span></td><td>Fastest, but Parameter Precision (67%) &amp; Context (65%) weakest</td></tr>
-          <tr><td><strong>Q1_0 + dspark</strong> (5.3 GB)</td><td><span class="score-badge score-90">87</span></td><td>—</td><td>—</td><td>Lossless speed, but 14.2s median turn hurts tool-calling</td></tr>
-          <tr><td><strong>Ternary Q2_0</strong> (7.2 GB)</td><td><span class="score-badge score-90">93</span></td><td><span class="score-badge score-85">85</span></td><td><span class="score-badge score-90">90</span></td><td>Best overall — highest quality, clean full run</td></tr>
-          <tr><td><strong>Ternary + dspark</strong> (9.1 GB)</td><td><span class="score-badge score-90">93</span></td><td><span class="score-badge score-80">77</span></td><td><span class="score-badge score-80">85</span></td><td>Quality drops in full run — 16.2s median turn causes timeouts</td></tr>
-          <tr><td><strong>DSPARK speed</strong></td><td>1.49× throughput</td><td>—</td><td>—</td><td>Useful for batch, hurts single-turn latency</td></tr>
+          <tr><td><strong>Ternary Q2_0</strong> (7.2 GB)</td><td><span class="score-badge score-90">93</span></td><td><span class="score-badge score-85">85</span></td><td><span class="score-badge score-90">90</span></td><td>Best overall — highest quality, clean full run ⭐</td></tr>
           <tr><td><strong>Q2_g64</strong> (7.6 GB)</td><td><span class="score-badge score-60">❌</span></td><td><span class="score-badge score-60">❌</span></td><td><span class="score-badge score-60">❌</span></td><td>Corrupted GGUF — upstream converter bug</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3 class="section-title" style="font-size:20px;font-weight:600;margin-top:32px;margin-bottom:16px">Table 2: DSPARK Speculative Decoding Impact</h3>
+    <p style="color:var(--text-dim);font-size:14px;margin-bottom:16px">How DSPARK affects throughput vs single-turn latency on GB10 hardware.</p>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>DSPARK Variant</th><th>Size</th><th>Impact on Quality</th><th>Impact on Speed / Latency</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td><strong>Q1_0 + dspark</strong></td><td>5.3 GB</td><td>Lossless — Short (15) score unchanged at 87</td><td>1.49× throughput gain, but 14.2s median turn (vs 5.1s base) — DSPARK adds latency per request, useful for batch/streaming only</td></tr>
+          <tr><td><strong>Ternary + dspark</strong></td><td>9.1 GB</td><td>Quality drops in full run — 85 → 77 from latency-induced timeouts</td><td>1.49× throughput, but 16.2s median turn (vs 5.7s base) — timeout cascade degrades multi-step tasks</td></tr>
+          <tr><td><strong>DSPARK speed (generic)</strong></td><td>—</td><td>— (throughput metric)</td><td><strong>Batch throughput:</strong> 1.49× raw token/s. <strong>Single-turn latency:</strong> ~3× slower median turn on GB10. DSPARK excels for concurrent API serving / long-form generation, but degrades interactive tool-calling.</td></tr>
         </tbody>
       </table>
     </div>
@@ -452,7 +467,7 @@ footer { padding: 60px 24px; text-align: center; color: var(--text-dim); font-si
       <div class="wb-icon">🎋</div>
       <div class="wb-text">
         <div class="wb-title">Benchmark: Bonsai 27B Variants</div>
-        <div class="wb-desc">6 variants benchmarked — 1-bit Q1_0 (3.6 GB) through Ternary Q2_0 (7.2 GB), plus DSPARK speculative decoding variants and the corrupt Q2_g64. Hosted on NVIDIA GB10 with 128 GB unified VRAM.</div>
+        <div class="wb-desc">3 core variants benchmarked — 1-bit Q1_0 (3.6 GB), Ternary Q2_0 (7.2 GB), and the corrupt Q2_g64 — alongside DSPARK speculative decoding impact analysis. Ran on NVIDIA GB10 with 128 GB unified VRAM.</div>
       </div>
     </div>
 
@@ -493,7 +508,7 @@ footer { padding: 60px 24px; text-align: center; color: var(--text-dim); font-si
 </section>
 
 <footer>
-  <p>Generated: 2026-07-17 · Hermes Agent · Bonsai 27B Benchmark · 6 variants benchmarked on NVIDIA GB10 (128 GB unified VRAM)</p>
+  <p>Generated: 2026-07-17 · Hermes Agent · Bonsai 27B Benchmark · 3 core variants + DSPARK analysis on NVIDIA GB10 (128 GB unified VRAM)</p>
 </footer>
 
 <script>
