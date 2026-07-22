@@ -146,8 +146,8 @@ Under concurrent load (4 simultaneous clients), latency increases from 3,988ms (
 
 **Benchmark script:** `laguna_bench.py` (adapted from `dspark_bench.py` for vLLM API)
 
-**Server:** vLLM 0.25.1 on gx10-b (NVIDIA GB10, 128 GB VRAM)
-**Endpoint:** `http://192.168.1.111:8888/v1`
+**Server:** vLLM 0.25.1 on gb10 (NVIDIA DGX Spark, 128 GB VRAM)
+**Endpoint:** `http://localhost:8888/v1`
 
 ---
 
