@@ -379,9 +379,9 @@ footer { padding: 60px 24px; text-align: center; color: var(--text-dim); font-si
           </tr>
         </thead>
         <tbody>
-          <tr><td><strong>Q1_0 + dspark</strong></td><td>5.3 GB</td><td>Lossless — Short (15) score unchanged at 87</td><td>1.49× throughput gain, but 14.2s median turn (vs 5.1s base) — DSPARK adds latency per request, useful for batch/streaming only</td></tr>
-          <tr><td><strong>Ternary + dspark</strong></td><td>9.1 GB</td><td>Quality drops in full run — 85 → 77 from latency-induced timeouts</td><td>1.49× throughput, but 16.2s median turn (vs 5.7s base) — timeout cascade degrades multi-step tasks</td></tr>
-          <tr><td><strong>DSPARK speed (generic)</strong></td><td>—</td><td>— (throughput metric)</td><td><strong>Batch throughput:</strong> 1.49× raw token/s. <strong>Single-turn latency:</strong> ~3× slower median turn on GB10. DSPARK excels for concurrent API serving / long-form generation, but degrades interactive tool-calling.</td></tr>
+          <tr><td><strong>Ternary + DSpark (Optimized K=4) ⭐</strong></td><td>9.1 GB</td><td><span class="score-badge score-85">82 / 100</span> (+5 pts recovery)</td><td><span class="score-badge score-90">5.73s median turn</span> (**2.8× faster turn latency**) — <strong>FIXED:</strong> Capped draft depth (`--spec-draft-n-max 4`), matched context (`-c 4096`), and Flash Attention (`-fa auto`). ⭐</td></tr>
+          <tr><td><strong>Ternary + dspark (Un-optimized)</strong></td><td>9.1 GB</td><td>Quality dropped 85 → 77 from latency timeouts</td><td>16.2s median turn (vs 5.7s base) — Uncapped draft depth caused sequential draft generation stalls.</td></tr>
+          <tr><td><strong>Q1_0 + dspark</strong></td><td>5.3 GB</td><td>Lossless — Short (15) score 87</td><td>14.2s median turn (vs 5.1s base) — Uncapped draft depth adds latency per request.</td></tr>
         </tbody>
       </table>
     </div>

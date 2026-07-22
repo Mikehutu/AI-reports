@@ -263,15 +263,15 @@ const reports = [
     icon: '🌙',
     iconColor: 'purple',
     title: 'Laguna S 2.1 NVFP4 — Tool-Call Benchmarks',
-    desc: '5-scenario practical latency benchmark for poolside/Laguna-S-2.1-NVFP4 (117.6B MoE, NVFP4) with DFlash speculative decoding on NVIDIA GB10. 130 results across short tool calls, multi-turn chains, long generation, and concurrent serving.',
+    desc: 'Full-suite 79-scenario evaluation for poolside/Laguna-S-2.1-NVFP4 (117.6B MoE, NVFP4) with DFlash speculative decoding on NVIDIA GB10. Features recipe comparison between unqualified K=15 (15.6 t/s) and production K=7 (50.8 t/s) configurations.',
     date: '2026-07-22',
-    tags: ['Laguna', 'NVFP4', 'MoE', 'vLLM', 'GB10', 'Tool-Call'],
+    tags: ['Laguna S 2.1', 'NVFP4', 'DFlash K=7', 'vLLM', 'GB10', 'Tool-Call'],
     stats: [
-      { label: 'Results', value: '130', color: 'green' },
-      { label: 'Scenarios', value: '5', color: 'cyan' },
-      { label: 'Timeouts', value: '0', color: 'gold' },
+      { label: 'Score', value: '82/100', color: 'green' },
+      { label: 'Decode Speed', value: '50.8 t/s', color: 'cyan' },
+      { label: 'Scenarios', value: '79', color: 'gold' },
     ],
-    featured: false,
+    featured: true,
   },
   // ── Coming Soon: Other model families ──
   // {

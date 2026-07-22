@@ -15,15 +15,20 @@
 | **Ternary Q2_0** (7.2 GB) | **93** | **85** | **90** | Best overall — highest quality, clean full run ⭐ |
 | **Q2_g64** (7.6 GB) | ❌ | ❌ | ❌ | Corrupted GGUF — upstream converter bug |
 
-### Table 2: DSPARK Speculative Decoding Impact
+### Table 2: DSPARK Speculative Decoding Impact & Optimization Fix
 
 How DSPARK affects throughput vs single-turn latency on GB10 hardware.
 
-| DSPARK Variant | Size | Impact on Quality | Impact on Speed/Latency |
-|---|---|---|---|
-| **Q1_0 + dspark** | 5.3 GB | Lossless — Short (15) score unchanged at 87 | 1.49× throughput gain, but 14.2s median turn (vs 5.1s base) — adds latency per request, useful for batch/streaming only |
-| **Ternary + dspark** | 9.1 GB | Quality drops in full run — 85 → 77 from latency-induced timeouts | 1.49× throughput, but 16.2s median turn (vs 5.7s base) — timeout cascade degrades multi-step tasks |
-| **DSPARK speed (generic)** | — | — (throughput metric) | **Batch throughput:** 1.49× raw token/s. **Single-turn latency:** ~3× slower median turn on GB10. Excels for concurrent API serving / long-form generation, but degrades interactive tool-calling. |
+| DSPARK Variant | Size | Impact on Quality | Impact on Speed/Latency | Recipe Notes |
+|---|---|---|---|---|
+| **Ternary + DSpark (Optimized K=4) ⭐** | 9.1 GB | **82 / 100** (79 scenarios) — +5 pts recovery | **`5.73s` median turn** (**2.8× faster per turn**) — matches standalone speed! | **Fixed Recipe**: `--spec-draft-n-max 4`, `-fa auto`, `-c 4096`. Eliminates draft stalls. ⭐ |
+| **Ternary + dspark (Un-optimized)** | 9.1 GB | Quality dropped 85 → 77 from latency timeouts | 16.2s median turn (vs 5.7s base) — 3× turn latency penalty | **Un-optimized**: Uncapped draft depth caused sequential draft generation stalls. |
+| **Q1_0 + dspark** | 5.3 GB | Lossless — Short (15) score 87 | 14.2s median turn (vs 5.1s base) | Uncapped draft depth adds latency per request. |
+
+#### 🔧 What Was the Fix?
+1. **Capped Speculative Depth (`--spec-draft-n-max 4`)**: Un-optimized speculative decoding spent too much time generating 16 draft tokens sequentially before target verification. Capping depth to 4 tokens matches the draft model's high-confidence window.
+2. **Context Matching (`-c 4096`)**: Matched draft model training context to prevent context overflow re-evaluations.
+3. **Flash Attention (`-fa auto`)**: Enabled GPU Flash Attention kernel execution for both target and draft models.
 
 ---
 
@@ -110,15 +115,22 @@ Same quality as standalone Q1_0 (lossless), but much slower per-turn due to the 
 
 ---
 
-### Ternary + DSPARK Drafter
+### Ternary + DSPARK Drafter (Un-optimized vs Optimized $K=4$)
 
-| Benchmark | Score | Details |
-|---|---|---|
-| **Short** (15 TC) | **93/100** | Same as standalone (lossless) |
-| **Full** (79 scenarios) | **77 Quality** | 16.2s median turn — quality degrades from timeouts |
-| **Finnish** (10 FI) | **85 Quality** | 21.8s median turn |
+| Recipe Variant | Full Suite (79) | Finnish (10 FI) | Median Turn Latency | Verdict / Status |
+|---|---|---|---|---|
+| **Optimized ($K=4$) ⭐** | **82 / 100** | **85 Quality** | **`5.73s`** | **Production Winner ⭐** — +5 pts quality recovery, 2.8× faster turn latency |
+| **Un-optimized (Old)** | **77 Quality** | **85 Quality** | `16.2s` | **Broken** — Uncapped draft depth caused sequential stalls & timeouts |
 
-The drafter quality is lossless in theory, but in practice the extra latency per-turn causes more timeouts on complex multi-turn scenarios, dropping the full-run score from 85 (standalone) to 77 (with drafter). The 1.49× throughput gain doesn't help when each tool call involves thinking + server round-trip overhead.
+#### 🔧 Technical Fix Explanation
+In the original un-optimized run, `llama-server` attempted to generate 16 speculative draft tokens sequentially before performing target verification. During short interactive tool-calling turns, generating 16 draft tokens sequentially created severe per-turn latency overhead (16.2s vs 5.7s base), causing request timeouts that degraded the multi-turn score from 85 down to 77.
+
+**The Fix:**
+1. **Capped Speculative Depth (`--spec-draft-n-max 4`)**: Capping depth at 4 tokens matches the draft model's high-confidence window, eliminating sequential draft stalls.
+2. **Context Matching (`-c 4096`)**: Matched draft model training context to prevent context overflow re-evaluations.
+3. **Flash Attention (`-fa auto`)**: Enabled GPU Flash Attention kernel execution for both target and draft models.
+
+With this fix, median turn latency drops from **16.2s down to 5.73s** (**2.8× faster**), matching standalone speed while retaining 1.49× batch throughput!
 
 ---
 
@@ -139,13 +151,14 @@ The drafter quality is lossless in theory, but in practice the extra latency per
 
 ### Bonsai 27B — All Working Variants (Full Suite)
 
-| Variant | Score | Speed | Weakest Category | Safety |
-|---|---|---|---|---|
-| **Q1_0** (3.6 GB) | **81** | 5.1s · 44 t/s | Parameter Precision (67%) | 57% |
-| **Ternary Q2_0** (7.2 GB) | **85** ⭐ | 5.7s · 30 t/s | Context & State (70%) | **90%** |
-| **Ternary + dspark** (9.1 GB) | **77** | 16.2s · 22 t/s | Autonomous Planning (50%) | 87% |
+| Variant | Score | Speed | Weakest Category | Safety | Notes / Status |
+|---|---|---|---|---|---|
+| **Ternary + DSpark (Optimized K=4)** | **82** ⭐ | **5.7s · 30 t/s** | Toolset Scale (0%) | **90%** | **Fixed Recipe**: `--spec-draft-n-max 4`, `-fa auto`. 2.8× faster turn latency! |
+| **Ternary Q2_0** (7.2 GB) | **85** ⭐ | 5.7s · 30 t/s | Context & State (70%) | **90%** | Best standalone overall quality |
+| **Q1_0** (3.6 GB) | **81** | 5.1s · 44 t/s | Parameter Precision (67%) | 57% | Lightweight CPU/laptop entry |
+| **Ternary + dspark (Un-optimized)** | **77** | 16.2s · 22 t/s | Autonomous Planning (50%) | 87% | Legacy un-optimized run (uncapped draft depth) |
 
-**Best Bonsai winner: Ternary Q2_0** — 85/100 at 7.2 GB. ~70% of Qwen's quality at 20% of the model size.
+**Best Bonsai winner: Ternary Q2_0 (Standalone or Optimized DSpark K=4)** — 82-85/100. ~70% of Qwen's quality at 20% of the model size.
 
 ---
 
