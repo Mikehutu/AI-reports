@@ -327,9 +327,15 @@ footer { padding: 60px 24px; text-align: center; color: var(--text-dim); font-si
   <div class="hero-cards">
     <div class="float-card green">
       <span class="icon">🎋</span>
-      <div class="title">Best Bonsai</div>
+      <div class="title">Best Standalone</div>
       <div class="score">85</div>
       <div class="desc">Ternary Q2_0 · 7.2GB · 5.7s turn</div>
+    </div>
+    <div class="float-card purple">
+      <span class="icon">⚡</span>
+      <div class="title">Multi-User Winner</div>
+      <div class="score">82</div>
+      <div class="desc">DSpark K=4 · 1.49× Batch Speedup</div>
     </div>
     <div class="float-card cyan">
       <span class="icon">☀</span>
@@ -524,10 +530,10 @@ const catScores = {
 const models = [
   {
     name: 'Ternary + DSpark (K=4) ⭐', label: 'Ternary + DSpark (Fixed K=4) ⭐', size: '9.1 GB', score: 82, short: 93, finnish: 85,
-    medTurn: '5.73s', tps: '28.0 t/s', promptTps: '155.0 t/s', deploy: null, resp: null,
-    safety: 90, weakest: 'Toolset Scale (0%)', tags: ['Production Winner', '2.8x Faster Turn', 'Fixed Recipe'],
+    medTurn: '5.73s', tps: '28.0 t/s (1.49x Batch)', promptTps: '155.0 t/s', deploy: null, resp: null,
+    safety: 90, weakest: 'Toolset Scale (0%)', tags: ['1.49x Multi-User Speedup', '2.8x Faster Turn', 'Fixed K=4 Recipe'],
     cats: catScores.ternary_dspark_opt, color: '#00ff88',
-    verdict: 'Fixed Recipe (--spec-draft-n-max 4, -fa auto, -c 4096). Recovered full quality (82/100), 2.8x faster turn latency (5.73s), matching standalone speed!'
+    verdict: '<strong>Single-User (NP=1):</strong> Matches base speed (28 tok/s) & 82/100 quality.<br><strong>Multi-User (NP=4):</strong> Unlocks 1.49× aggregate server throughput across parallel streams!'
   },
   {
     name: 'Ternary Q2_0', label: 'Ternary Bonsai ⭐', size: '7.2 GB', score: 85, short: 93, finnish: 90,
