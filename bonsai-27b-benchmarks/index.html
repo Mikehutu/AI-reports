@@ -634,7 +634,7 @@ function renderModelCards() {
   }).join('');
 }
 
-function renderFailures() {
+function renderFailPatterns() {
   const grid = document.getElementById('failGrid');
   grid.innerHTML = failPatterns.map(f => `
     <div class="fail-card">
