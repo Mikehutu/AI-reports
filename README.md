@@ -10,6 +10,9 @@ ai-reports/
 ├── bonsai-27b-benchmarks/
 │   ├── index.html               ← Bonsai 27B + comparison models dashboard
 │   └── bonsai-benchmark-results.md
+├── laguna-s-2.1-nvfp4-benchmarks/
+│   ├── index.html               ← Laguna S 2.1 NVFP4 tool-call benchmark
+│   └── laguna-benchmark-results.md
 └── README.md
 ```
 

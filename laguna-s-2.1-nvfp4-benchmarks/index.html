@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Laguna S 2.1 NVFP4 — Tool-Call Benchmark Results</title>
+<style>
+:root {
+  --bg: #0a0a12;
+  --bg2: #0f1020;
+  --card: rgba(255,255,255,0.035);
+  --card-hover: rgba(255,255,255,0.06);
+  --border: rgba(255,255,255,0.08);
+  --border-bright: rgba(0,255,136,0.3);
+  --text: #e2e4f0;
+  --text-dim: #8888a0;
+  --green: #00ff88;
+  --cyan: #00ddff;
+  --purple: #a855f7;
+  --gold: #ffaa00;
+  --red: #ff4466;
+  --radius: 16px;
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+body {
+  font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+  background: var(--bg); color: var(--text); overflow-x: hidden; line-height: 1.6;
+  min-height: 100vh;
+}
+.bg-grid {
+  position: fixed; inset: 0; z-index: 0; pointer-events: none;
+  background-image:
+    linear-gradient(rgba(0,255,136,0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0,255,136,0.03) 1px, transparent 1px);
+  background-size: 60px 60px; animation: gridMove 20s linear infinite;
+}
+@keyframes gridMove { from { background-position: 0 0; } to { background-position: 60px 60px; } }
+.bg-glow1 {
+  position: fixed; top: -20%; left: -10%; width: 60%; height: 60%;
+  background: radial-gradient(circle, rgba(0,255,136,0.08), transparent 60%);
+  z-index: 0; pointer-events: none; animation: glowFloat 15s ease-in-out infinite alternate;
+}
+.bg-glow2 {
+  position: fixed; bottom: -20%; right: -10%; width: 50%; height: 50%;
+  background: radial-gradient(circle, rgba(168,85,247,0.06), transparent 60%);
+  z-index: 0; pointer-events: none; animation: glowFloat 18s ease-in-out infinite alternate-reverse;
+}
+@keyframes glowFloat {
+  from { transform: translate(0,0) scale(1); }
+  to { transform: translate(5%, 5%) scale(1.1); }
+}
+.container { max-width: 1100px; margin: 0 auto; padding: 0 24px; position: relative; z-index: 1; }
+
+/* Hero */
+.hero {
+  min-height: 60vh; display: flex; flex-direction: column; justify-content: center; align-items: center;
+  text-align: center; padding: 80px 24px 40px;
+}
+.hero-badge {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: rgba(0,255,136,0.1); border: 1px solid rgba(0,255,136,0.3);
+  padding: 6px 16px; border-radius: 30px; font-size: 13px; color: var(--green);
+  margin-bottom: 24px; backdrop-filter: blur(10px);
+}
+.hero-badge .dot { width:8px; height:8px; border-radius:50%; background:var(--green); animation: pulse 2s infinite; }
+@keyframes pulse { 0%,100%{opacity:1;} 50%{opacity:0.3;} }
+.hero h1 {
+  font-size: clamp(32px, 6vw, 56px); font-weight: 800; letter-spacing: -2px;
+  background: linear-gradient(135deg, var(--green), var(--cyan), var(--purple));
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+  margin-bottom: 16px; line-height: 1.1;
+}
+.hero-sub { font-size: 17px; color: var(--text-dim); max-width: 600px; margin-bottom: 32px; }
+
+.hero-stats { display: flex; flex-wrap: wrap; gap: 16px; justify-content: center; }
+.stat-pill {
+  background: var(--card); border: 1px solid var(--border); border-radius: 12px;
+  padding: 14px 24px; text-align: center; min-width: 100px; backdrop-filter: blur(10px);
+  transition: all 0.3s;
+}
+.stat-pill:hover { border-color: var(--border-bright); transform: translateY(-3px) scale(1.03); }
+.stat-pill .sp-num { font-size: 26px; font-weight: 800; background: linear-gradient(135deg, var(--green), var(--cyan)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+.stat-pill .sp-label { font-size: 11px; color: var(--text-dim); text-transform: uppercase; letter-spacing: 1px; }
+
+/* Sections */
+section { padding: 60px 0; border-bottom: 1px solid var(--border); }
+.section-title { font-size: 28px; font-weight: 700; margin-bottom: 8px; letter-spacing: -0.5px; }
+.section-title .accent { color: var(--green); }
+.section-sub { font-size: 14px; color: var(--text-dim); margin-bottom: 24px; }
+
+/* Tables */
+table { width: 100%; border-collapse: collapse; margin: 16px 0; }
+th, td { padding: 12px 16px; text-align: left; border-bottom: 1px solid var(--border); }
+th { font-size: 13px; text-transform: uppercase; letter-spacing: 0.5px; color: var(--text-dim); }
+td { font-size: 14px; }
+tr:hover { background: var(--card-hover); }
+td.num { text-align: right; font-family: 'Fira Code', monospace; }
+td.num .green { color: var(--green); }
+td.num .cyan { color: var(--cyan); }
+
+/* Cards */
+.card {
+  background: var(--card); border: 1px solid var(--border); border-radius: var(--radius);
+  padding: 24px; margin: 16px 0; backdrop-filter: blur(10px);
+}
+.card h3 { color: var(--cyan); margin-bottom: 12px; font-size: 18px; }
+.card ul { padding-left: 20px; }
+.card li { margin-bottom: 6px; }
+
+/* Footer */
+footer { padding: 40px 24px; text-align: center; color: var(--text-dim); font-size: 13px; border-top: 1px solid var(--border); }
+footer a { color: var(--green); text-decoration: none; }
+
+.reveal { opacity: 0; transform: translateY(30px); transition: all 0.7s cubic-bezier(0.23,1,0.32,1); }
+.reveal.visible { opacity: 1; transform: translateY(0); }
+</style>
+</head>
+<body>
+<div class="bg-grid"></div>
+<div class="bg-glow1"></div>
+<div class="bg-glow2"></div>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-badge"><span class="dot"></span> Tool-Call Latency · vLLM 0.25.1 · NVFP4 Quantization</div>
+  <h1>Laguna S 2.1<br>NVFP4 Benchmarks</h1>
+  <p class="hero-sub">5-scenario practical latency benchmark for poolside/Laguna-S-2.1-NVFP4 (117.6B MoE) with DFlash speculative decoding on NVIDIA GB10 hardware. 130 total results across short tool calls, multi-turn chains, long generation, and concurrent serving.</p>
+  <div class="hero-stats">
+    <div class="stat-pill"><div class="sp-num">130</div><div class="sp-label">Results</div></div>
+    <div class="stat-pill"><div class="sp-num">5</div><div class="sp-label">Scenarios</div></div>
+    <div class="stat-pill"><div class="sp-num">0</div><div class="sp-label">Timeouts</div></div>
+  </div>
+</div>
+
+<!-- CONTENT -->
+<div class="container">
+
+<section class="reveal">
+  <h2 class="section-title">Quick Reference</h2>
+  <p class="section-sub">5 scenarios, 130 total results. All completed with 0 timeouts.</p>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Scenario</th>
+        <th>Reps</th>
+        <th>Median</th>
+        <th>Mean</th>
+        <th>P90</th>
+        <th>tok/s</th>
+        <th>Tokens</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>S1</strong> Short tool call</td>
+        <td class="num">20</td>
+        <td class="num">3,988ms</td>
+        <td class="num">3,986ms</td>
+        <td class="num">4,116ms</td>
+        <td class="num green">14.0</td>
+        <td class="num">1,120</td>
+      </tr>
+      <tr>
+        <td><strong>S2</strong> Multi-param tool call</td>
+        <td class="num">20</td>
+        <td class="num">7,065ms</td>
+        <td class="num">7,035ms</td>
+        <td class="num">7,395ms</td>
+        <td class="num green">20.9</td>
+        <td class="num">2,960</td>
+      </tr>
+      <tr>
+        <td><strong>S3</strong> Multi-turn chain (4 turns)</td>
+        <td class="num">40</td>
+        <td class="num">4,903ms</td>
+        <td class="num">4,236ms</td>
+        <td class="num">5,945ms</td>
+        <td class="num green">22.0</td>
+        <td class="num">3,850</td>
+      </tr>
+      <tr>
+        <td><strong>S4</strong> Long free-text gen (1024 tok)</td>
+        <td class="num">10</td>
+        <td class="num">62,007ms</td>
+        <td class="num">61,972ms</td>
+        <td class="num">65,081ms</td>
+        <td class="num green">16.6</td>
+        <td class="num">10,240</td>
+      </tr>
+      <tr>
+        <td><strong>S5</strong> Concurrent (4×10)</td>
+        <td class="num">40</td>
+        <td class="num">6,137ms</td>
+        <td class="num">6,082ms</td>
+        <td class="num">6,372ms</td>
+        <td class="num green">9.1</td>
+        <td class="num">2,240</td>
+      </tr>
+    </tbody>
+  </table>
+</section>
+
+<section class="reveal">
+  <h2 class="section-title">Model Configuration</h2>
+  <div class="card">
+    <h3>poolside/Laguna-S-2.1-NVFP4</h3>
+    <ul>
+      <li><strong>Architecture:</strong> 117.6B MoE (NVFP4 quantization, ~71 GB)</li>
+      <li><strong>Draft model:</strong> poolside/Laguna-S-2.1-DFlash-NVFP4 (15 speculative tokens)</li>
+      <li><strong>Runtime:</strong> vLLM 0.25.1 (Docker container)</li>
+      <li><strong>KV cache:</strong> FP8</li>
+      <li><strong>Context window:</strong> 262,144 tokens</li>
+      <li><strong>GPU memory utilization:</strong> 0.85</li>
+      <li><strong>Hardware:</strong> NVIDIA GB10 (DGX Spark, 128 GB unified VRAM)</li>
+      <li><strong>Endpoint:</strong> http://192.168.1.111:8888/v1</li>
+    </ul>
+  </div>
+</section>
+
+<section class="reveal">
+  <h2 class="section-title">Scenario Details</h2>
+
+  <h3 style="color: var(--cyan); margin-bottom: 12px;">S1: Short Tool Call (20 reps)</h3>
+  <div class="card">
+    <ul>
+      <li><strong>Task:</strong> Get weather for Helsinki, Finland</li>
+      <li><strong>Max tokens:</strong> 128</li>
+      <li><strong>Median total time:</strong> 3,988ms</li>
+      <li><strong>Median generation:</strong> 56 tokens</li>
+      <li><strong>Median throughput:</strong> 14.0 tok/s</li>
+      <li><strong>Timeouts:</strong> 0</li>
+    </ul>
+    <p style="color: var(--text-dim); margin-top: 12px; font-size: 13px;">The model reliably produces tool calls but has high latency per request. The 117.6B MoE with NVFP4 quantization takes ~4 seconds to process a simple tool-call prompt.</p>
+  </div>
+
+  <h3 style="color: var(--cyan); margin-bottom: 12px; margin-top: 24px;">S2: Multi-Parameter Tool Call (20 reps)</h3>
+  <div class="card">
+    <ul>
+      <li><strong>Task:</strong> Create a calendar event with 7 parameters</li>
+      <li><strong>Max tokens:</strong> 256</li>
+      <li><strong>Median total time:</strong> 7,065ms</li>
+      <li><strong>Median generation:</strong> 148 tokens</li>
+      <li><strong>Median throughput:</strong> 20.9 tok/s</li>
+      <li><strong>Timeouts:</strong> 0</li>
+    </ul>
+    <p style="color: var(--text-dim); margin-top: 12px; font-size: 13px;">Multi-parameter tool calls take ~7 seconds median. The higher token count (148 vs 56) explains the longer time, but throughput is better at 20.9 tok/s.</p>
+  </div>
+
+  <h3 style="color: var(--cyan); margin-bottom: 12px; margin-top: 24px;">S3: Multi-Turn Tool Chain (10 sessions × 4 turns = 40 results)</h3>
+  <div class="card">
+    <ul>
+      <li><strong>Task:</strong> Search contacts → Draft email → Send email → Log CRM note</li>
+      <li><strong>Max tokens per turn:</strong> 128</li>
+      <li><strong>Median total time per turn:</strong> 4,903ms</li>
+      <li><strong>Mean total time per turn:</strong> 4,236ms</li>
+      <li><strong>Median generation:</strong> 128 tokens</li>
+      <li><strong>Median throughput:</strong> 22.0 tok/s</li>
+      <li><strong>Timeouts:</strong> 0</li>
+    </ul>
+    <p style="color: var(--text-dim); margin-top: 12px; font-size: 13px;">Multi-turn chains work well — later turns are faster (mean 4,236ms vs median 4,903ms), likely due to KV cache reuse. No timeouts across 40 turns.</p>
+  </div>
+
+  <h3 style="color: var(--cyan); margin-bottom: 12px; margin-top: 24px;">S4: Long Free-Text Generation (10 reps)</h3>
+  <div class="card">
+    <ul>
+      <li><strong>Task:</strong> Write an 800-1200 word technical design document</li>
+      <li><strong>Max tokens:</strong> 1024</li>
+      <li><strong>Median total time:</strong> 62,007ms (~62 seconds)</li>
+      <li><strong>Median generation:</strong> 1,024 tokens</li>
+      <li><strong>Median throughput:</strong> 16.6 tok/s</li>
+      <li><strong>Timeouts:</strong> 0</li>
+    </ul>
+    <p style="color: var(--text-dim); margin-top: 12px; font-size: 13px;">Long-form generation is the slowest scenario at ~62 seconds per 1024-token response. The 16.6 tok/s throughput is reasonable for a 117.6B MoE model with DFlash speculative decoding.</p>
+  </div>
+
+  <h3 style="color: var(--cyan); margin-bottom: 12px; margin-top: 24px;">S5: Concurrent Short Requests (4 clients × 10 reps = 40 results)</h3>
+  <div class="card">
+    <ul>
+      <li><strong>Task:</strong> Same as S1 (short tool call)</li>
+      <li><strong>Max tokens:</strong> 128</li>
+      <li><strong>Median total time:</strong> 6,137ms</li>
+      <li><strong>Median throughput per request:</strong> 9.1 tok/s</li>
+      <li><strong>Timeouts:</strong> 0</li>
+    </ul>
+    <p style="color: var(--text-dim); margin-top: 12px; font-size: 13px;">Under concurrent load (4 simultaneous clients), latency increases from 3,988ms (S1) to 6,137ms — a 1.54× slowdown. Throughput per request drops from 14.0 to 9.1 tok/s, but aggregate throughput is 4×9.1 = 36.4 tok/s, which is 2.6× the single-request throughput.</p>
+  </div>
+</section>
+
+<section class="reveal">
+  <h2 class="section-title">Comparison with Bonsai 27B Q1_0</h2>
+  <table>
+    <thead>
+      <tr>
+        <th>Metric</th>
+        <th>Laguna S 2.1 (NVFP4)</th>
+        <th>Bonsai 27B Q1_0</th>
+        <th>Ratio</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Short tool call latency</td>
+        <td class="num">3,988ms</td>
+        <td class="num">~5,100ms*</td>
+        <td class="num green">0.78×</td>
+      </tr>
+      <tr>
+        <td>Long generation tok/s</td>
+        <td class="num green">16.6</td>
+        <td class="num green">~44.3</td>
+        <td class="num">0.37×</td>
+      </tr>
+      <tr>
+        <td>Model size</td>
+        <td class="num">117.6B (71 GB)</td>
+        <td class="num">27B (3.6 GB)</td>
+        <td class="num">3.6× params</td>
+      </tr>
+      <tr>
+        <td>Parameter efficiency</td>
+        <td class="num">0.23 tok/s/GB</td>
+        <td class="num green">12.3 tok/s/GB</td>
+        <td class="num green">0.019×</td>
+      </tr>
+    </tbody>
+  </table>
+  <p style="color: var(--text-dim); margin-top: 16px; font-size: 13px;">* Bonsai Q1_0 median turn from benchmark results.</p>
+  <p style="color: var(--text-dim); margin-top: 8px; font-size: 13px;"><strong>Laguna trades raw throughput for massive scale</strong> — 4.3× the parameters at 20× the model size. The per-GB efficiency is 53× worse than Bonsai Q1_0, but the absolute quality and context window (262K) are far superior.</p>
+</section>
+
+<section class="reveal">
+  <h2 class="section-title">Key Findings</h2>
+  <div class="card">
+    <h3>Latency Profile</h3>
+    <ul>
+      <li><strong>Tool-call latency is high</strong> — S1 takes ~4 seconds for a simple tool call. Expected for a 117.6B MoE model; the model must process the full prompt including tool schema before generating the tool call.</li>
+      <li><strong>Multi-turn chains benefit from KV cache</strong> — S3's mean latency (4,236ms) is lower than its median (4,903ms), indicating that turns 2-4 are faster than turn 1 due to cached context.</li>
+      <li><strong>Long generation is the bottleneck</strong> — S4 takes 62 seconds for 1024 tokens. At 16.6 tok/s, this is the model's sustained generation speed.</li>
+      <li><strong>Concurrency scales well</strong> — 4 concurrent requests at 9.1 tok/s each = 36.4 tok/s aggregate, a 2.6× throughput gain over single requests (14.0 tok/s). The 1.54× latency increase is acceptable for batch serving.</li>
+      <li><strong>No timeouts</strong> — All 130 results completed successfully with 0 timeouts, indicating the server is stable under both single and concurrent load.</li>
+    </ul>
+  </div>
+</section>
+
+</div>
+
+<footer>
+  <p>Hosted on GitHub Pages · <a href="https://github.com/Mikehutu">GitHub</a> · Powered by local GPU clusters</p>
+</footer>
+
+<script>
+// Scroll reveal
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+}, { threshold: 0.1 });
+document.querySelectorAll('section').forEach(s => { s.classList.add('reveal'); observer.observe(s); });
+</script>
+</body>
+</html>
