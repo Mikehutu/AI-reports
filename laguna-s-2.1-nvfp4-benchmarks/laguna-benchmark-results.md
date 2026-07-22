@@ -5,6 +5,7 @@
 > **Draft:** poolside/Laguna-S-2.1-DFlash-NVFP4 (15 speculative tokens, DFlash method)
 > **Runtime:** vLLM 0.25.1 (Docker) · KV cache: FP8 · Context: 262,144 tokens
 > **Benchmark Suite:** 5-scenario practical latency test (130 total results)
+> **Note:** DFlash speculative decoding acceptance rate is low (~5.4%) due to limited auxiliary layers (6/48). Throughput is effectively autoregressive. Expected 50 tok/s requires proper DFlash training with more auxiliary layers.
 
 ---
 

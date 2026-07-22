@@ -124,7 +124,7 @@ footer a { color: var(--green); text-decoration: none; }
 <div class="hero">
   <div class="hero-badge"><span class="dot"></span> Tool-Call Latency · vLLM 0.25.1 · NVFP4 Quantization</div>
   <h1>Laguna S 2.1<br>NVFP4 Benchmarks</h1>
-  <p class="hero-sub">5-scenario practical latency benchmark for poolside/Laguna-S-2.1-NVFP4 (117.6B MoE) with DFlash speculative decoding on NVIDIA GB10 hardware. 130 total results across short tool calls, multi-turn chains, long generation, and concurrent serving.</p>
+  <p class="hero-sub">5-scenario practical latency benchmark for poolside/Laguna-S-2.1-NVFP4 (117.6B MoE) with DFlash speculative decoding on NVIDIA GB10 hardware. 130 total results across short tool calls, multi-turn chains, long generation, and concurrent serving. <strong>Note:</strong> DFlash acceptance rate is low (~5.4%) due to limited auxiliary layers (6/48) — throughput is effectively autoregressive.</p>
   <div class="hero-stats">
     <div class="stat-pill"><div class="sp-num">130</div><div class="sp-label">Results</div></div>
     <div class="stat-pill"><div class="sp-num">5</div><div class="sp-label">Scenarios</div></div>
