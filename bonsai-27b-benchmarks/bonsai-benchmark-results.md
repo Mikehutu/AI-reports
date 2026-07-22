@@ -30,6 +30,10 @@ How DSPARK affects throughput vs single-turn latency on GB10 hardware.
 2. **Context Matching (`-c 4096`)**: Matched draft model training context to prevent context overflow re-evaluations.
 3. **Flash Attention (`-fa auto`)**: Enabled GPU Flash Attention kernel execution for both target and draft models.
 
+#### 👤 Single-User (`NP=1`) vs 👥 Multi-User (`NP=4`) Execution Modes
+- **Single-User Mode (`NP=1` - Default)**: For local interactive use (VSCode, Cursor, local agent tools). Cuts VRAM consumption by 50% (**~10.5 GB VRAM**), runs at peak single-sequence decode speed (**28.0 tok/s Q2 / 42.7 tok/s Q1**), and unlocks **32K to 65K context headroom** on 12GB–24GB GPUs.
+- **Multi-User Batch Serving (`NP=4`)**: For shared server APIs handling 4 concurrent streams. Pre-allocates 4 KV cache slots (**19.0 GB VRAM**) and unlocks DSpark's **1.49× aggregate server throughput gain** across parallel requests.
+
 ---
 
 ## All Benchmarks — Full Results

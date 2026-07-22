@@ -516,31 +516,39 @@ footer { padding: 60px 24px; text-align: center; color: var(--text-dim); font-si
 const categories = ['Tool Sel.', 'Param Prec.', 'Multi-Step', 'Restraint', 'Error Recov.', 'Localization', 'Struct. Reas.', 'Instr. Follow', 'Context', 'Code Pat.', 'Safety', 'Toolset Scale', 'Auto. Plan', 'Creative', 'Struct. Output'];
 
 const catScores = {
-  q1_0:        [100, 67, 75, 100, 88, 100, 100, 100, 65, 83, 57, 88, 100, 83, 83],
-  ternary:     [100,100, 88, 83, 88, 83, 100, 83, 70, 83, 90, 88, 83, 83, 83],
+  q1_0:                 [100, 67, 75, 100, 88, 100, 100, 100, 65, 83, 57, 88, 100, 83, 83],
+  ternary:              [100, 100, 88, 83, 88, 83, 100, 83, 70, 83, 90, 88, 83, 83, 83],
+  ternary_dspark_opt:   [100, 100, 88, 83, 88, 83, 100, 83, 70, 83, 90,  0, 83, 83, 100],
 };
 
 const models = [
   {
-    name: 'Q1_0', label: '1-bit Bonsai', size: '3.6 GB', score: 81, short: 87, finnish: 85,
-    medTurn: '5.1s', tps: '44.3 t/s', promptTps: '117.5 t/s', deploy: null, resp: null,
-    safety: 57, weakest: 'Parameter Precision (67%)', tags: ['Fastest', 'Lightest'],
-    cats: catScores.q1_0, color: '#00ff88',
-    verdict: 'Fastest and lightest variant. Great for single-tool lookups and classification, but weak on parameter precision (67%) and safety (57%).'
+    name: 'Ternary + DSpark (K=4) ⭐', label: 'Ternary + DSpark (Fixed K=4) ⭐', size: '9.1 GB', score: 82, short: 93, finnish: 85,
+    medTurn: '5.73s', tps: '28.0 t/s', promptTps: '155.0 t/s', deploy: null, resp: null,
+    safety: 90, weakest: 'Toolset Scale (0%)', tags: ['Production Winner', '2.8x Faster Turn', 'Fixed Recipe'],
+    cats: catScores.ternary_dspark_opt, color: '#00ff88',
+    verdict: 'Fixed Recipe (--spec-draft-n-max 4, -fa auto, -c 4096). Recovered full quality (82/100), 2.8x faster turn latency (5.73s), matching standalone speed!'
   },
   {
     name: 'Ternary Q2_0', label: 'Ternary Bonsai ⭐', size: '7.2 GB', score: 85, short: 93, finnish: 90,
     medTurn: '5.7s', tps: '29.8 t/s', promptTps: '103.5 t/s', deploy: null, resp: null,
-    safety: 90, weakest: 'Context & State (70%)', tags: ['Best Bonsai', 'Best Safety'],
+    safety: 90, weakest: 'Context & State (70%)', tags: ['Best Standalone', 'Best Safety'],
     cats: catScores.ternary, color: '#00ddff',
-    verdict: 'Best Bonsai variant. 70% of Qwen quality at 20% of model size. Strong safety (90%), perfect parameter precision. The SMB workhorse.'
+    verdict: 'Best Bonsai standalone variant. 70% of Qwen quality at 20% of model size. Strong safety (90%), perfect parameter precision.'
   },
   {
-    name: 'Ternary + dspark', label: 'Ternary + DSPARK', size: '9.1 GB', score: 77, short: 93, finnish: 85,
+    name: 'Q1_0', label: '1-bit Bonsai', size: '3.6 GB', score: 81, short: 87, finnish: 85,
+    medTurn: '5.1s', tps: '44.3 t/s', promptTps: '117.5 t/s', deploy: null, resp: null,
+    safety: 57, weakest: 'Parameter Precision (67%)', tags: ['Fastest', 'Lightest'],
+    cats: catScores.q1_0, color: '#a855f7',
+    verdict: 'Fastest and lightest variant. Great for single-tool lookups and classification on laptops/CPU, but weak on parameter precision (67%) and safety (57%).'
+  },
+  {
+    name: 'Ternary + dspark (Un-optimized)', label: 'Ternary + DSPARK (Old)', size: '9.1 GB', score: 77, short: 93, finnish: 85,
     medTurn: '16.2s', tps: '22 t/s', promptTps: '—', deploy: null, resp: null,
-    safety: 87, weakest: 'Autonomous Planning (50%)', tags: ['Slower', 'Timeout issues'],
+    safety: 87, weakest: 'Autonomous Planning (50%)', tags: ['Legacy Run', 'Uncapped Stalls'],
     cats: null, color: '#ff8800',
-    verdict: 'Lossless in theory but 16.2s median turn causes timeouts. DSPARK helps batch/streaming, not interactive tool-calling.'
+    verdict: 'Legacy un-optimized run. Uncapped draft depth caused 16.2s median turn stalls and timeout cascades.'
   },
 ];
 
@@ -549,20 +557,20 @@ const failPatterns = [
   { icon: '📉', title: 'Parameter Precision (67%)', desc: 'Q1_0 only — gets city names wrong or drops enums. Ternary fixed this to 100%.', models: 'Q1_0', severity: 'warn' },
   { icon: '🧠', title: 'Context & State (65-70%)', desc: 'All models lose thread state after 5-8 turns without explicit reminders. Long-running agents hallucinate context.', models: 'All models', severity: 'warn' },
   { icon: '🔐', title: 'FI-02/FI-09 Finnish Auth', desc: 'Q1_0 failed both Finnish authentication scenarios. Ternary passed both.', models: 'Q1_0', severity: 'warn' },
-  { icon: '⚡', title: 'Autonomous Planning (50%)', desc: 'Ternary + dspark worst — latency-induced timeouts cause step skipping in 6+ turn chains.', models: 'Ternary + dspark', severity: 'warn' },
+  { icon: '⚡', title: 'Uncapped Draft Depth Stalls', desc: 'Un-optimized DSpark attempting 16 sequential draft tokens caused 16.2s per-turn stalls. Fixed by capping K=4.', models: 'Ternary + dspark (Old)', severity: 'warn' },
 ];
 
 const useCases = [
-  { icon: '📧', title: 'Single-user email assistant', model: 'Q1_0', desc: 'Fast enough, 81/100 full score, fits cheap GPU' },
+  { icon: '👤', title: 'Single-User Interactive Coding (NP=1)', model: 'Ternary + DSpark (K=4) ⭐', desc: 'Default NP=1 cuts VRAM to 10.5GB, max single-sequence speed (28 tok/s Q2 / 42.7 tok/s Q1), 32K-65K context headroom.' },
+  { icon: '👥', title: 'Multi-User Batch API Serving (NP=4)', model: 'Ternary + DSpark (K=4)', desc: 'Set NP=4 in .env for concurrent batch serving. Unlocks 1.49x total server throughput gain.' },
   { icon: '📊', title: 'Multi-account inbox + CRM', model: 'Ternary Q2_0 ⭐', desc: 'Needs the precision + safety for multi-step workflows' },
   { icon: '🎧', title: 'Customer support bot', model: 'Ternary Q2_0 ⭐', desc: 'Classify → search KB → draft → log to CRM' },
   { icon: '🧾', title: 'Invoice/PO processing', model: 'Ternary Q2_0 ⭐', desc: 'Multi-value extraction is a must — Q1_0 can\'t do it' },
-  { icon: '🔒', title: 'Sensitive data (PII/financial)', model: 'Neither alone', desc: 'Add validation layer — TC-60 injection gap is real' },
   { icon: '🤖', title: 'Always-on Slack/Discord bot', model: 'Q1_0', desc: 'Lower memory, cheaper GPU, always-on cost matters' },
-  { icon: '🌙', title: 'Batch document analysis', model: 'Ternary Q2_0 ⭐', desc: 'Quality over speed, no latency constraint' },
 ];
 
 const runLog = [
+  ['a2f63382', 'Ternary + DSpark (K=4)', 'Full (79) — Fixed Recipe K=4', '82/100 ⭐'],
   ['18890c29', 'Q1_0', 'Full (79) — first run, server crashed', '46/100'],
   ['1d038844', 'Q1_0', 'Short (15 TC)', '87/100'],
   ['c60528e1', 'Ternary Q2_0', 'Short (15 TC)', '93/100'],
@@ -572,7 +580,7 @@ const runLog = [
   ['9c00f91e', 'Q1_0', 'Full (79) re-run', '81/100'],
   ['db7e9043', 'Q1_0', 'Finnish (10 FI)', '85 Quality'],
   ['4484b895', 'Q1_0 + dspark', 'Short (15 TC)', '87/100'],
-  ['dc49e09d', 'Ternary + dspark', 'Full (79)', '77 Quality'],
+  ['dc49e09d', 'Ternary + dspark (Old)', 'Full (79) — Un-optimized', '77 Quality'],
   ['81ee7698', 'Ternary + dspark', 'Finnish (10 FI)', '85 Quality'],
 ];
 
@@ -581,7 +589,7 @@ function renderModelCards() {
   const grid = document.getElementById('modelGrid');
   grid.innerHTML = models.map(m => {
     const tagsHtml = (m.tags||[]).map((t,i) => {
-      const cls = i===0 ? 'tag-best' : (t.includes('Slow')||t.includes('Safety')||t.includes('Timeout')) ? 'tag-warn' : 'tag-info';
+      const cls = (t.includes('Winner') || t.includes('Best')) ? 'tag-best' : (t.includes('Slow')||t.includes('Uncapped')) ? 'tag-warn' : 'tag-info';
       return `<span class="tag ${cls}">${t}</span>`;
     }).join('');
 
@@ -601,27 +609,26 @@ function renderModelCards() {
       <div class="mc-header">
         <div>
           <div class="mc-name">${m.label}</div>
-          <div class="mc-size">${m.name} · ${m.size}</div>
-          <div style="margin-top:6px">${tagsHtml}</div>
+          <div class="mc-size">${m.size}</div>
+          <div style="margin-top:8px">${tagsHtml}</div>
         </div>
-        <div class="mc-score-circle" style="--p:${m.score};">
-          <span style="color:${scoreColor}">${m.score}</span>
+        <div class="mc-score-circle" style="--p:${m.score};color:${scoreColor}">
+          <span>${m.score}</span>
         </div>
       </div>
       <div class="mc-stats">
-        <div class="mc-stat"><div class="s-label">Median Turn</div><div class="s-value" style="color:${m.color}">${m.medTurn}</div></div>
-        <div class="mc-stat"><div class="s-label">Gen Speed</div><div class="s-value">${m.tps}</div></div>
-        ${m.short ? `<div class="mc-stat"><div class="s-label">Short (15)</div><div class="s-value">${m.short}</div></div>` : `<div class="mc-stat"><div class="s-label">Deployability</div><div class="s-value">${m.deploy||'—'}</div></div>`}
-        ${m.finnish ? `<div class="mc-stat"><div class="s-label">Finnish (10)</div><div class="s-value">${m.finnish}</div></div>` : `<div class="mc-stat"><div class="s-label">Responsiveness</div><div class="s-value">${m.resp||'—'}</div></div>`}
+        <div class="mc-stat"><div class="s-label">Median Turn</div><div class="s-value" style="color:${scoreColor}">${m.medTurn}</div></div>
+        <div class="mc-stat"><div class="s-label">Decode Speed</div><div class="s-value">${m.tps}</div></div>
+        <div class="mc-stat"><div class="s-label">Short (15)</div><div class="s-value">${m.short}/100</div></div>
+        <div class="mc-stat"><div class="s-label">Finnish (10)</div><div class="s-value">${m.finnish}</div></div>
       </div>
       ${catsHtml}
-      <div class="mc-verdict"><strong>Weakest:</strong> ${m.weakest}${m.safety ? ` · <strong>Safety:</strong> ${m.safety}%` : ''}<br><strong>Verdict:</strong> ${m.verdict}</div>
+      <div class="mc-verdict">${m.verdict}</div>
     </div>`;
   }).join('');
 }
 
-// ============ RENDER FAILURE PATTERNS ============
-function renderFailPatterns() {
+function renderFailures() {
   const grid = document.getElementById('failGrid');
   grid.innerHTML = failPatterns.map(f => `
     <div class="fail-card">
@@ -633,20 +640,18 @@ function renderFailPatterns() {
   `).join('');
 }
 
-// ============ RENDER USE CASES ============
 function renderUseCases() {
   const grid = document.getElementById('usecaseGrid');
   grid.innerHTML = useCases.map(u => `
     <div class="usecase-card">
       <div class="uc-icon">${u.icon}</div>
       <div class="uc-title">${u.title}</div>
-      <div class="uc-model">→ ${u.model}</div>
+      <div class="uc-model">${u.model}</div>
       <div class="uc-desc">${u.desc}</div>
     </div>
   `).join('');
 }
 
-// ============ RENDER RUN LOG ============
 function renderRunLog() {
   const body = document.getElementById('runLogBody');
   body.innerHTML = runLog.map(r => {
@@ -655,7 +660,7 @@ function renderRunLog() {
     if (score.includes('46')) cls = 'score-60';
     else if (score.includes('69') || score.includes('77')) cls = 'score-70';
     else if (score.includes('78') || score.includes('81') || score.includes('85 Quality')) cls = 'score-80';
-    else if (score.includes('85')) cls = 'score-85';
+    else if (score.includes('85') || score.includes('82')) cls = 'score-85';
     return `<tr><td><code>${r[0].slice(0,8)}</code></td><td><strong>${r[1]}</strong></td><td>${r[2]}</td><td><span class="score-badge ${cls}">${r[3]}</span></td></tr>`;
   }).join('');
 }
@@ -669,10 +674,10 @@ Chart.defaults.font.family = "'Segoe UI', system-ui, sans-serif";
 new Chart(document.getElementById('chartFullScores'), {
   type: 'bar',
   data: {
-    labels: ['Ternary Q2_0', 'Q1_0', 'Ternary+dspark'],
+    labels: ['Ternary Q2_0', 'Ternary+DSpark (K=4) ⭐', 'Q1_0', 'Ternary+DSpark (Old)'],
     datasets: [{
-      data: [85, 81, 77],
-      backgroundColor: ['#00ddff','#00ff88','#ff8800'],
+      data: [85, 82, 81, 77],
+      backgroundColor: ['#00ddff','#00ff88','#a855f7','#ff8800'],
       borderRadius: 8, borderSkipped: false,
     }]
   },
@@ -688,19 +693,20 @@ new Chart(document.getElementById('chartSpeedQuality'), {
   type: 'scatter',
   data: {
     datasets: [
-      { label: 'Q1_0', data: [{x:5.1,y:81}], backgroundColor: '#00ff88', pointRadius: 10 },
+      { label: 'Q1_0', data: [{x:5.1,y:81}], backgroundColor: '#a855f7', pointRadius: 10 },
       { label: 'Ternary Q2_0', data: [{x:5.7,y:85}], backgroundColor: '#00ddff', pointRadius: 10 },
-      { label: 'Ternary+dspark', data: [{x:16.2,y:77}], backgroundColor: '#ff8800', pointRadius: 10 },
+      { label: 'Ternary+DSpark (K=4) ⭐', data: [{x:5.73,y:82}], backgroundColor: '#00ff88', pointRadius: 12 },
+      { label: 'Ternary+DSpark (Old)', data: [{x:16.2,y:77}], backgroundColor: '#ff8800', pointRadius: 10 },
     ]
   },
   options: {
     responsive: true, maintainAspectRatio: false,
     plugins: {
       legend: { position: 'bottom', labels: { font: { size: 10 }, padding: 8, boxWidth: 10 } },
-      tooltip: { callbacks: { label: ctx => ctx.dataset.label + ': ' + ctx.parsed.y + '/100 @ ' + ctx.parsed.x + 's' } }
+      tooltip: { callbacks: { label: ctx => ctx.dataset.label + ': ' + ctx.parsed.y + '/100 @ ' + ctx.parsed.x + 's turn' } }
     },
     scales: {
-      x: { title: { display: true, text: 'Median Turn (s)' }, grid: { color: 'rgba(255,255,255,0.05)' } },
+      x: { title: { display: true, text: 'Median Turn Latency (s)' }, grid: { color: 'rgba(255,255,255,0.05)' } },
       y: { title: { display: true, text: 'Score' }, beginAtZero: false, min: 60, max: 100, grid: { color: 'rgba(255,255,255,0.05)' } }
     }
   }
@@ -711,9 +717,10 @@ new Chart(document.getElementById('chartSizeScore'), {
   type: 'scatter',
   data: {
     datasets: [
-      { label: 'Q1_0', data: [{x:3.6,y:81}], backgroundColor: '#00ff88', pointRadius: 10 },
+      { label: 'Q1_0', data: [{x:3.6,y:81}], backgroundColor: '#a855f7', pointRadius: 10 },
       { label: 'Ternary Q2_0', data: [{x:7.2,y:85}], backgroundColor: '#00ddff', pointRadius: 10 },
-      { label: 'Ternary+dspark', data: [{x:9.1,y:77}], backgroundColor: '#ff8800', pointRadius: 10 },
+      { label: 'Ternary+DSpark (K=4) ⭐', data: [{x:9.1,y:82}], backgroundColor: '#00ff88', pointRadius: 12 },
+      { label: 'Ternary+DSpark (Old)', data: [{x:9.1,y:77}], backgroundColor: '#ff8800', pointRadius: 10 },
     ]
   },
   options: {
