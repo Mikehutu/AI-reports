@@ -229,12 +229,12 @@ footer a { color: var(--green); text-decoration: none; }
 
 <!-- HERO -->
 <div class="hero">
-  <div class="hero-badge"><span class="dot"></span> Tool-Eval-Bench v2.1.0 · Full 79 Scenarios Suite</div>
+  <div class="hero-badge"><span class="dot"></span> Tool-Eval-Bench v2.1.0 · 69 Tool-Call + 10 Finnish Suite</div>
   <h1>Laguna S 2.1<br>NVFP4 Benchmarks</h1>
   <p class="hero-sub">Full-suite evaluation of poolside/Laguna-S-2.1-NVFP4 (117.6B MoE, NVFP4) for tool-calling quality, agent autonomy, and latency performance on NVIDIA GB10 hardware. Compares Production DFlash K=7 recipe vs Unqualified K=15 baseline.</p>
   <div class="hero-meta">
     <div class="hero-meta-item"><div class="label">Hardware</div><div class="val">NVIDIA GB10 · 128 GB VRAM</div></div>
-    <div class="hero-meta-item"><div class="label">Suite</div><div class="val">tool-eval-bench (79 Scenarios)</div></div>
+    <div class="hero-meta-item"><div class="label">Suite</div><div class="val">tool-eval-bench (69 TC + 10 FI)</div></div>
     <div class="hero-meta-item"><div class="label">Model</div><div class="val">117.6B MoE (NVFP4)</div></div>
     <div class="hero-meta-item"><div class="label">Production Score</div><div class="val">82/100</div></div>
   </div>
@@ -243,7 +243,7 @@ footer a { color: var(--green); text-decoration: none; }
       <span class="icon">🎯</span>
       <div class="title">Full Suite Score</div>
       <div class="score">82</div>
-      <div class="desc">79 scenarios · 130/158 pts · ★★★★ Good</div>
+      <div class="desc">69 tool-call · 114/138 pts · 82/100 ★★★★ + Finnish 12/20 pts · 60/100 ★★★★ · ★★★★ Good</div>
     </div>
     <div class="float-card cyan">
       <span class="icon">⚡</span>
@@ -264,7 +264,7 @@ footer a { color: var(--green); text-decoration: none; }
 <section>
   <div class="container">
     <h2 class="section-title">Quick <span class="accent">Reference</span></h2>
-    <p class="section-sub">79 scenarios across 15 categories. Each scenario scored pass=2, partial=1, fail=0. Final score: 0–100.</p>
+    <p class="section-sub">69 tool-call across 14 categories + 10 Finnish. Each scenario scored pass=2, partial=1, fail=0. Final score: 0–100.</p>
 
     <div class="stats-row">
       <div class="stat-pill"><div class="sp-num">82</div><div class="sp-label">Overall Score</div></div>
@@ -296,7 +296,7 @@ footer a { color: var(--green); text-decoration: none; }
             <td><span class="score-badge score-90">75.4% (5.28 tok/step)</span></td>
             <td><span class="score-badge score-90">50.76 tok/s</span></td>
             <td><span class="score-badge score-90">3.6 s</span></td>
-            <td><span class="score-badge score-85">82 / 100 (79 Scenarios)</span></td>
+            <td><span class="score-badge score-85">82 / 100 (69 TC)</span></td>
             <td><strong>Production Winner ⭐</strong> — 2.5× decode speedup, sub-4s turn latency.</td>
           </tr>
           <tr>
@@ -312,7 +312,7 @@ footer a { color: var(--green); text-decoration: none; }
       </table>
     </div>
 
-    <h3 style="font-size:20px;font-weight:600;margin-bottom:16px">Table 2: Category Scores Breakdown (79 Scenarios)</h3>
+    <h3 style="font-size:20px;font-weight:600;margin-bottom:16px">Table 2: Category Scores Breakdown — Tool-Call (69)</h3>
     <div class="table-wrap">
       <table>
         <thead>
@@ -350,13 +350,13 @@ footer a { color: var(--green); text-decoration: none; }
 
     <div class="chart-grid">
       <div class="chart-card">
-        <div class="chart-title">Category Scores (79 Scenarios)</div>
+        <div class="chart-title">Category Scores (69 TC + 10 FI)</div>
         <div class="chart-sub">Percentage score per category — 15 categories evaluated</div>
         <div class="chart-container"><canvas id="chartCategoryScores"></canvas></div>
       </div>
       <div class="chart-card">
         <div class="chart-title">Pass / Partial / Fail Distribution</div>
-        <div class="chart-sub">Scenario outcome breakdown across all 79 scenarios</div>
+        <div class="chart-sub">Tool-call scenario outcome breakdown across 69 scenarios</div>
         <div class="chart-container"><canvas id="chartOutcomes"></canvas></div>
       </div>
     </div>
@@ -444,7 +444,7 @@ footer a { color: var(--green); text-decoration: none; }
 <!-- FOOTER -->
 <footer>
   <p>Hosted on GitHub Pages · <a href="https://github.com/Mikehutu">GitHub</a> · Powered by NVIDIA GB10</p>
-  <p style="margin-top:8px;">Generated: 2026-07-22 · Hermes Agent · tool-eval-bench v2.1.0 · 79 Scenarios</p>
+  <p style="margin-top:8px;">Generated: 2026-07-22 · Hermes Agent · tool-eval-bench v2.1.0 · 69 TC + 10 FI</p>
 </footer>
 
 <script>

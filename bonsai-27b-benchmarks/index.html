@@ -317,7 +317,7 @@ footer { padding: 60px 24px; text-align: center; color: var(--text-dim); font-si
 
 <!-- HERO -->
 <div class="hero">
-  <div class="hero-badge"><span class="dot"></span> Benchmark Suite v2.1.0 · 79 Scenarios · 3 Core Variants</div>
+  <div class="hero-badge"><span class="dot"></span> Benchmark Suite v2.1.0 · 69 TC + 10 FI · 3 Core Variants</div>
   <h1>Bonsai 27B<br>Benchmark Results</h1>
   <p class="hero-sub">Comprehensive evaluation of quantized LLM variants for local tool-calling, agent autonomy, and Finnish localization on NVIDIA GB10 hardware.</p>
   <div class="hero-meta">
@@ -364,7 +364,7 @@ footer { padding: 60px 24px; text-align: center; color: var(--text-dim); font-si
       <table>
         <thead>
           <tr>
-            <th>Variant</th><th>Short (15)</th><th>Full (79)</th><th>Finnish (10)</th><th>Notes</th>
+            <th>Variant</th><th>Short (15)</th><th>Tool-Call (69)</th><th>Finnish (10)</th><th>Notes</th>
           </tr>
         </thead>
         <tbody>
@@ -402,7 +402,7 @@ footer { padding: 60px 24px; text-align: center; color: var(--text-dim); font-si
 
     <div class="chart-grid">
       <div class="chart-card">
-        <div class="chart-title">Full Suite Scores (79 Scenarios)</div>
+        <div class="chart-title">Full Suite Scores (69 TC + 10 FI)</div>
         <div class="chart-sub">Overall quality score per model variant</div>
         <div class="chart-container"><canvas id="chartFullScores"></canvas></div>
       </div>
@@ -576,17 +576,17 @@ const useCases = [
 ];
 
 const runLog = [
-  ['a2f63382', 'Ternary + DSpark (K=4)', 'Full (79) — Fixed Recipe K=4', '82/100 ⭐'],
-  ['18890c29', 'Q1_0', 'Full (79) — first run, server crashed', '46/100'],
+  ['a2f63382', 'Ternary + DSpark (K=4)', 'Tool-Call (69) — Fixed Recipe K=4', '82/100 ⭐'],
+  ['18890c29', 'Q1_0', 'Tool-Call (69) — first run, server crashed', '46/100'],
   ['1d038844', 'Q1_0', 'Short (15 TC)', '87/100'],
   ['c60528e1', 'Ternary Q2_0', 'Short (15 TC)', '93/100'],
   ['397bd353', 'Ternary Q2_0', 'Finnish (10 FI)', '90/100'],
   ['14f3e171', 'Ternary + dspark', 'Short (15 TC)', '93/100'],
-  ['026bf8e4', 'Ternary Q2_0', 'Full (79)', '85/100'],
-  ['9c00f91e', 'Q1_0', 'Full (79) re-run', '81/100'],
+  ['026bf8e4', 'Ternary Q2_0', 'Tool-Call (69)', '85/100'],
+  ['9c00f91e', 'Q1_0', 'Tool-Call (69) re-run', '81/100'],
   ['db7e9043', 'Q1_0', 'Finnish (10 FI)', '85 Quality'],
   ['4484b895', 'Q1_0 + dspark', 'Short (15 TC)', '87/100'],
-  ['dc49e09d', 'Ternary + dspark (Old)', 'Full (79) — Un-optimized', '77 Quality'],
+  ['dc49e09d', 'Ternary + dspark (Old)', 'Tool-Call (69) — Un-optimized', '77 Quality'],
   ['81ee7698', 'Ternary + dspark', 'Finnish (10 FI)', '85 Quality'],
 ];
 
