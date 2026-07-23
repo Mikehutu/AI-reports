@@ -273,21 +273,22 @@ const reports = [
     ],
     featured: true,
   },
-  // ── Coming Soon: Other model families ──
-  // {
-  //   folder: 'qwen3.6-35b-benchmark',
-  //   icon: '�­',
-  //   iconColor: 'gold',
-  //   title: 'Qwen3.6 35B — Benchmark Results',
-  //   desc: 'Coming soon. Full-suite evaluation of Qwen3.6 35B A3B UD.',
-  //   date: '2026-08-01',
-  //   tags: ['Qwen3.6', '35B', 'Q8_U'],
-  //   stats: [
-  //     { label: 'Score', value: '—', color: 'green' },
-  //     { label: 'Models', value: '—', color: 'cyan' },
-  //   ],
-  //   featured: false,
-  // },
+  // ── Qwen3.6 Report ──
+  {
+    folder: 'qwen3.6-35b-benchmarks',
+    icon: '🤖',
+    iconColor: 'gold',
+    title: 'Qwen3.6 35B — Benchmark Results',
+    desc: 'Full-suite benchmark of Qwen3.6-35B-A3B-UD-Q8_K_XL with 69 tool-call + 10 Finnish scenarios. Finished 91/100 overall with 85/100 Finnish on NVIDIA GB10.',
+    date: '2026-07-23',
+    tags: ['Qwen3.6', '35B', 'Q8_K_X', 'llama.cpp', 'GB10'],
+    stats: [
+      { label: 'Score', value: '91/100', color: 'green' },
+      { label: 'Finnish', value: '85/100', color: 'cyan' },
+      { label: 'Scenarios', value: '69 TC + 10 FI', color: 'gold' },
+    ],
+    featured: true,
+  },
   // ── TEMPLATE: Copy this block to add a new report ──
   // {
   //   folder: 'qwen-finetune-eval',
