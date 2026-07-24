@@ -201,7 +201,7 @@ tbody tr:hover { background: rgba(0,255,136,0.03); }
 .fail-card .fc-title { font-size: 14px; font-weight: 600; margin-bottom: 6px; }
 .fail-card .fc-desc { font-size: 13px; color: var(--text-dim); }
 
-/* Use case cards */
+/* USE CASE CARDS */
 .usecase-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 16px; }
 .usecase-card {
   background: var(--card); border: 1px solid var(--border); border-radius: 12px;
@@ -216,6 +216,52 @@ tbody tr:hover { background: rgba(0,255,136,0.03); }
 /* Footer */
 footer { padding: 60px 24px; text-align: center; color: var(--text-dim); font-size: 13px; border-top: 1px solid var(--border); }
 footer a { color: var(--green); text-decoration: none; }
+
+/* 3D MODEL CARDS */
+.model-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); gap: 24px; }
+.model-card {
+  background: var(--card); border: 1px solid var(--border); border-radius: var(--radius);
+  padding: 28px; backdrop-filter: blur(10px); position: relative; overflow: hidden;
+  transition: all 0.4s cubic-bezier(0.23,1,0.32,1); transform-style: preserve-3d;
+  perspective: 800px;
+}
+.model-card:hover { border-color: var(--border-bright); transform: translateY(-4px); box-shadow: 0 12px 40px rgba(0,255,136,0.06); }
+.model-card .mc-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 20px; }
+.model-card .mc-name { font-size: 18px; font-weight: 700; }
+.model-card .mc-size { font-size: 12px; color: var(--text-dim); margin-top: 4px; }
+.model-card .mc-score-circle {
+  width: 64px; height: 64px; border-radius: 50%; display: flex; align-items: center; justify-content: center;
+  font-size: 22px; font-weight: 800; position: relative; flex-shrink: 0;
+  background: conic-gradient(var(--green) 0deg, var(--green) calc(var(--p) * 3.6deg), rgba(255,255,255,0.05) calc(var(--p) * 3.6deg));
+}
+.model-card .mc-score-circle::before {
+  content: ''; position: absolute; inset: 4px; border-radius: 50%; background: var(--bg2);
+}
+.model-card .mc-score-circle span { position: relative; z-index: 1; }
+.mc-stats { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 20px; }
+.mc-stat { background: rgba(255,255,255,0.03); border-radius: 10px; padding: 10px 12px; }
+.mc-stat .s-label { font-size: 11px; color: var(--text-dim); text-transform: uppercase; letter-spacing: 0.5px; }
+.mc-stat .s-value { font-size: 16px; font-weight: 600; margin-top: 2px; }
+.mc-cats { margin-bottom: 16px; }
+.mc-cat { display: flex; align-items: center; gap: 8px; margin-bottom: 6px; }
+.mc-cat .cat-name { font-size: 12px; color: var(--text-dim); width: 130px; flex-shrink: 0; }
+.mc-cat .cat-bar { flex: 1; height: 6px; background: rgba(255,255,255,0.05); border-radius: 3px; overflow: hidden; }
+.mc-cat .cat-fill { height: 100%; border-radius: 3px; transition: width 1s ease; }
+.mc-cat .cat-val { font-size: 12px; font-weight: 600; width: 36px; text-align: right; }
+.mc-verdict { font-size: 13px; color: var(--text-dim); border-top: 1px solid var(--border); padding-top: 14px; line-height: 1.5; }
+.tag-info { background: rgba(0,221,255,0.12); color: var(--cyan); border: 1px solid rgba(0,221,255,0.25); }
+
+/* Winner banner */
+.winner-banner {
+  background: linear-gradient(135deg, rgba(0,255,136,0.08), rgba(0,221,255,0.05));
+  border: 1px solid rgba(0,255,136,0.2); border-radius: var(--radius);
+  padding: 24px 32px; margin-bottom: 32px; backdrop-filter: blur(10px);
+  display: flex; align-items: center; gap: 24px; flex-wrap: wrap;
+}
+.winner-banner .wb-icon { font-size: 48px; }
+.winner-banner .wb-text { flex: 1; min-width: 250px; }
+.winner-banner .wb-title { font-size: 18px; font-weight: 700; color: var(--green); }
+.winner-banner .wb-desc { font-size: 14px; color: var(--text-dim); margin-top: 4px; }
 
 /* Scroll reveal */
 .reveal { opacity: 0; transform: translateY(30px); transition: all 0.7s cubic-bezier(0.23,1,0.32,1); }
@@ -318,49 +364,6 @@ footer a { color: var(--green); text-decoration: none; }
       </table>
     </div>
 
-    <h3 style="font-size:20px;font-weight:600;margin-bottom:16px">Table 3: Feature Impact: Thinking vs No-Thinking</h3>
-    <div class="table-wrap">
-      <table>
-        <thead>
-          <tr>
-            <th>Variant</th>
-            <th>Thinking Config</th>
-            <th>Tool-Call Score</th>
-            <th>Points</th>
-            <th>Pass</th>
-            <th>Partial</th>
-            <th>Fail</th>
-            <th>Med. Turn Latency</th>
-            <th>Verdict</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td><strong>Thinking-Enabled (K=7) ⭐</strong></td>
-            <td><code>enable_thinking=true</code> (default)</td>
-            <td><span class="score-badge score-85">82 / 100</span></td>
-            <td>114 / 138</td>
-            <td>42</td>
-            <td>8</td>
-            <td>8</td>
-            <td>3.6 s</td>
-            <td>Production baseline — good quality, slower turns.</td>
-          </tr>
-          <tr>
-            <td><strong>No-Thinking (K=7) ⭐</strong></td>
-            <td><code>enable_thinking=false</code></td>
-            <td><span class="score-badge score-90">86 / 100</span></td>
-            <td>121 / 140</td>
-            <td>57</td>
-            <td>7</td>
-            <td>6</td>
-            <td><span class="score-badge score-90">3.0 s</span></td>
-            <td><strong>Winner ⭐</strong> — +4 pts better, 17% faster turns, no infinite loop risk.</td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-
     <h3 style="font-size:20px;font-weight:600;margin-bottom:16px">Table 2: Category Scores Breakdown — Tool-Call (69)</h3>
     <div class="table-wrap">
       <table>
@@ -388,6 +391,22 @@ footer a { color: var(--green); text-decoration: none; }
         </tbody>
       </table>
     </div>
+  </div>
+</section>
+
+<!-- MODEL CARDS -->
+<section>
+  <div class="container">
+    <h2 class="section-title">Laguna <span class="accent">Variants</span></h2>
+    <p class="section-sub">Deep-dive into each configuration variant with category breakdowns and verdicts.</p>
+    <div class="winner-banner">
+      <div class="wb-icon">🌙</div>
+      <div class="wb-text">
+        <div class="wb-title">Benchmark: Laguna S 2.1 NVFP4 Variants</div>
+        <div class="wb-desc">2 inference variants benchmarked — thinking-enabled (enable_thinking=true, 82/100) and no-thinking (enable_thinking=false, 86/100). Both using the Production DFlash K=7 recipe on NVIDIA GB10 with 128 GB unified VRAM. Disabling thinking delivered +4 pts and 17% faster turn latency.</div>
+      </div>
+    </div>
+    <div class="model-grid" id="modelGrid"></div>
   </div>
 </section>
 
@@ -497,11 +516,87 @@ footer a { color: var(--green); text-decoration: none; }
 </footer>
 
 <script>
+// ============ DATA ============
+const categories = ['Tool Sel.', 'Param Prec.', 'Multi-Step', 'Restraint', 'Error Recov.', 'Localization', 'Struct. Reas.', 'Instr. Follow', 'Context', 'Code Pat.', 'Safety', 'Toolset Scale', 'Auto. Plan', 'Creative', 'Struct. Output'];
+
+const catScores = {
+  thinkingEnabled: [100, 100, 100, 100, 62, 67, 100, 83, 85, 83, 73, 100, 67, 83, 83],
+  noThinking:      [100, 100, 75, 100, 88, 75, 67, 83, 80, 83, 77, 100, 100, 100, 100],
+};
+
+const models = [
+  {
+    name: 'No-Thinking (K=7) ⭐', label: 'No-Thinking ⭐', size: 'enable_thinking=false', score: 86, finnish: '6/8',
+    medTurn: '3.0s', tps: '50.8 tok/s', tokens: '226K', latency: '3.0s',
+    safety: 77, weakest: 'Multi-Step Chains (75%)',
+    tags: ['+4 Pt Boost', '17% Faster Turns', 'No Loop Risk', 'Production K=7'],
+    cats: catScores.noThinking, color: '#00ff88',
+    verdict: '<strong>Winner ⭐</strong> — Disabling thinking delivered +4 pts and 17% faster turns. Error recovery (+26%), autonomous planning (+33%), and creative composition (+17%) all improved significantly. Slightly weaker on multi-step chains (75%) and structured reasoning (67%). No infinite loop risk.'
+  },
+  {
+    name: 'Thinking-Enabled (K=7)', label: 'Thinking-Enabled', size: 'enable_thinking=true (default)', score: 82, finnish: '60/100',
+    medTurn: '3.6s', tps: '50.8 tok/s', tokens: '229K', latency: '3.6s',
+    safety: 73, weakest: 'Error Recovery (62%)',
+    tags: ['Production Recipe', 'Best Multi-Step', 'Best Reasoning'],
+    cats: catScores.thinkingEnabled, color: '#a855f7',
+    verdict: 'Production baseline with 50.8 tok/s decode speed. Perfect scores on multi-step chains (100%), structured reasoning (100%), and toolset scale (100%). Best for complex chain tasks where internal reasoning is beneficial before tool selection.'
+  },
+];
+
+// ============ RENDER MODEL CARDS ============
+function renderModelCards() {
+  const grid = document.getElementById('modelGrid');
+  if (!grid) return;
+  grid.innerHTML = models.map(m => {
+    const tagsHtml = (m.tags||[]).map(t => {
+      const cls = (t.includes('Starred') || t.includes('Boost') || t.includes('Fast') || t.includes('Production')) ? 'tag-best' : 'tag-info';
+      return `<span class="tag ${cls}">${t}</span>`;
+    }).join('');
+
+    let catsHtml = '';
+    if (m.cats) {
+      catsHtml = '<div class="mc-cats">' + categories.map((c,i) => {
+        const v = m.cats[i];
+        if (v === null) return '';
+        const color = v >= 90 ? '#00ff88' : v >= 75 ? '#00ddff' : v >= 60 ? '#ffaa00' : '#ff4466';
+        return `<div class="mc-cat"><span class="cat-name">${c}</span><div class="cat-bar"><div class="cat-fill" style="width:${v}%;background:${color}"></div></div><span class="cat-val" style="color:${color}">${v}%</span></div>`;
+      }).join('') + '</div>';
+    }
+
+    const scoreColor = m.score >= 90 ? '#00ff88' : m.score >= 85 ? '#00ddff' : m.score >= 80 ? '#a855f7' : m.score >= 70 ? '#ffaa00' : '#ff4466';
+
+    return `
+    <div class="model-card">
+      <div class="mc-header">
+        <div>
+          <div class="mc-name">${m.label}</div>
+          <div class="mc-size">${m.size}</div>
+          <div style="margin-top:8px">${tagsHtml}</div>
+        </div>
+        <div class="mc-score-circle" style="--p:${m.score};color:${scoreColor}">
+          <span>${m.score}</span>
+        </div>
+      </div>
+      <div class="mc-stats">
+        <div class="mc-stat"><div class="s-label">Median Turn</div><div class="s-value" style="color:${scoreColor}">${m.medTurn}</div></div>
+        <div class="mc-stat"><div class="s-label">Decode Speed</div><div class="s-value">${m.tps}</div></div>
+        <div class="mc-stat"><div class="s-label">Total Tokens</div><div class="s-value">${m.tokens}</div></div>
+        <div class="mc-stat"><div class="s-label">Finnish (FI)</div><div class="s-value">${m.finnish}</div></div>
+      </div>
+      ${catsHtml}
+      <div class="mc-verdict">${m.verdict}</div>
+    </div>`;
+  }).join('');
+}
+
 // Scroll reveal
 const observer = new IntersectionObserver((entries) => {
   entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
 }, { threshold: 0.1 });
 document.querySelectorAll('section').forEach(s => { s.classList.add('reveal'); observer.observe(s); });
+
+// Render model cards
+renderModelCards();
 
 // Category scores chart
 new Chart(document.getElementById('chartCategoryScores'), {
