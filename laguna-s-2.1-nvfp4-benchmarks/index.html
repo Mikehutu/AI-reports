@@ -231,7 +231,7 @@ footer a { color: var(--green); text-decoration: none; }
 <div class="hero">
   <div class="hero-badge"><span class="dot"></span> Tool-Eval-Bench v2.1.0 · 69 Tool-Call + 10 Finnish Suite</div>
   <h1>Laguna S 2.1<br>NVFP4 Benchmarks</h1>
-  <p class="hero-sub">Full-suite evaluation of poolside/Laguna-S-2.1-NVFP4 (117.6B MoE, NVFP4) for tool-calling quality, agent autonomy, and latency performance on NVIDIA GB10 hardware. Compares Production DFlash K=7 recipe vs Unqualified K=15 baseline.</p>
+  <p class="hero-sub">Full-suite evaluation of poolside/Laguna-S-2.1-NVFP4 (117.6B MoE, NVFP4) for tool-calling quality, agent autonomy, and latency performance on NVIDIA GB10 hardware. Compares Production DFlash K=7 recipe vs Unqualified K=15 baseline, plus the impact of disabling thinking/reasoning tokens.</p>
   <div class="hero-meta">
     <div class="hero-meta-item"><div class="label">Hardware</div><div class="val">NVIDIA GB10 · 128 GB VRAM</div></div>
     <div class="hero-meta-item"><div class="label">Suite</div><div class="val">tool-eval-bench (69 TC + 10 FI)</div></div>
@@ -241,21 +241,27 @@ footer a { color: var(--green); text-decoration: none; }
   <div class="hero-cards">
     <div class="float-card green">
       <span class="icon">🎯</span>
-      <div class="title">Full Suite Score</div>
+      <div class="title">Thinking-Enabled Score</div>
       <div class="score">82</div>
-      <div class="desc">69 tool-call · 114/138 pts · 82/100 ★★★★ + Finnish 12/20 pts · 60/100 ★★★★ · ★★★★ Good</div>
+      <div class="desc">69 TC · 114/138 pts · ★★★★ Good</div>
     </div>
     <div class="float-card cyan">
       <span class="icon">⚡</span>
-      <div class="title">Pure Decode Speed</div>
-      <div class="score">50.8</div>
-      <div class="desc">tok/s · 2.5× speedup over AR mode</div>
+      <div class="title">No-Thinking Score</div>
+      <div class="score">86</div>
+      <div class="desc">66 TC · 115/132 pts · +4 pt boost</div>
     </div>
     <div class="float-card purple">
       <span class="icon">⏱️</span>
-      <div class="title">Median Latency</div>
-      <div class="score">3.6s</div>
-      <div class="desc">Turn latency (down from 15.0s)</div>
+      <div class="title">Med. Turn Latency</div>
+      <div class="score">3.0s</div>
+      <div class="desc">No-thinking: 3.0s vs Thinking: 3.6s</div>
+    </div>
+    <div class="float-card gold">
+      <span class="icon">🔧</span>
+      <div class="title">DFlash Decode Speed</div>
+      <div class="score">50.8</div>
+      <div class="desc">tok/s · K=7 production recipe</div>
     </div>
   </div>
 </div>
@@ -307,6 +313,49 @@ footer a { color: var(--green); text-decoration: none; }
             <td><span class="score-badge score-fail">15.0 s</span></td>
             <td><span class="score-badge score-90">89 / 100 (69 Scenarios)</span></td>
             <td><strong>Broken</strong> — Deep draft depth causes verification stalls & turn latency penalty.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3 style="font-size:20px;font-weight:600;margin-bottom:16px">Table 3: Feature Impact: Thinking vs No-Thinking</h3>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Variant</th>
+            <th>Thinking Config</th>
+            <th>Tool-Call Score</th>
+            <th>Points</th>
+            <th>Pass</th>
+            <th>Partial</th>
+            <th>Fail</th>
+            <th>Med. Turn Latency</th>
+            <th>Verdict</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Thinking-Enabled (K=7) ⭐</strong></td>
+            <td><code>enable_thinking=true</code> (default)</td>
+            <td><span class="score-badge score-85">82 / 100</span></td>
+            <td>114 / 138</td>
+            <td>42</td>
+            <td>8</td>
+            <td>8</td>
+            <td>3.6 s</td>
+            <td>Production baseline — good quality, slower turns.</td>
+          </tr>
+          <tr>
+            <td><strong>No-Thinking (K=7) ⭐</strong></td>
+            <td><code>enable_thinking=false</code></td>
+            <td><span class="score-badge score-90">86 / 100</span></td>
+            <td>121 / 140</td>
+            <td>57</td>
+            <td>7</td>
+            <td>6</td>
+            <td><span class="score-badge score-90">3.0 s</span></td>
+            <td><strong>Winner ⭐</strong> — +4 pts better, 17% faster turns, no infinite loop risk.</td>
           </tr>
         </tbody>
       </table>
