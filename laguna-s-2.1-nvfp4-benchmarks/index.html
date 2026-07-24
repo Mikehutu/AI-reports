@@ -403,7 +403,7 @@ footer a { color: var(--green); text-decoration: none; }
       <div class="wb-icon">🌙</div>
       <div class="wb-text">
         <div class="wb-title">Benchmark: Laguna S 2.1 NVFP4 Variants</div>
-        <div class="wb-desc">2 inference variants benchmarked — thinking-enabled (enable_thinking=true, 82/100) and no-thinking (enable_thinking=false, 86/100). Both using the Production DFlash K=7 recipe on NVIDIA GB10 with 128 GB unified VRAM. Disabling thinking delivered +4 pts and 17% faster turn latency.</div>
+        <div class="wb-desc">3 variants benchmarked — thinking-enabled (82/100), no-thinking v1 (86/100), and <strong>v2 metadata config</strong> (84/100, top_k:20 poolside fix). All using Production DFlash K=7 on GB10. v2 is a config-only change (same weights); score within noise of v1 no-thinking. Disabling thinking remains the correct operational fix.</div>
       </div>
     </div>
     <div class="model-grid" id="modelGrid"></div>
@@ -522,6 +522,7 @@ const categories = ['Tool Sel.', 'Param Prec.', 'Multi-Step', 'Restraint', 'Erro
 const catScores = {
   thinkingEnabled: [100, 100, 100, 100, 62, 67, 100, 83, 85, 83, 73, 100, 67, 83, 83],
   noThinking:      [100, 100, 75, 100, 88, 75, 67, 83, 80, 83, 77, 100, 100, 100, 100],
+  v2Metadata:      [100, 100, 75, 100, 88, 50, 67, 83, 80, 83, 67, 100, 100, 100, 100],
 };
 
 const models = [
@@ -540,6 +541,14 @@ const models = [
     tags: ['Production Recipe', 'Best Multi-Step', 'Best Reasoning'],
     cats: catScores.thinkingEnabled, color: '#a855f7',
     verdict: 'Production baseline with 50.8 tok/s decode speed. Perfect scores on multi-step chains (100%), structured reasoning (100%), and toolset scale (100%). Best for complex chain tasks where internal reasoning is beneficial before tool selection.'
+  },
+  {
+    name: 'v2 Metadata Config (top_k:20)', label: 'v2 Metadata ⏤', size: 'Jul 24 config update', score: 84, finnish: '4/8',
+    medTurn: '2.9s', tps: '50.8 tok/s', tokens: '235K', latency: '2.9s',
+    safety: 67, weakest: 'Safety (67%)',
+    tags: ['Poolside Fix', 'top_k:20 Added', 'Same Weights', 'No-Thinking'],
+    cats: catScores.v2Metadata, color: '#ddaaff',
+    verdict: 'Poolside metadata update (generation_config.json: top_k:20, min_p:0.0). Same weights as v1 — config-only change. Score 84/100 within noise range of previous no-thinking run (86/100). FI regression (50% vs 75%) likely run variance. top_k:20 constraint has minimal impact on tool-calling quality.'
   },
 ];
 

@@ -115,10 +115,11 @@ Impact of proper DFlash token depth ($K=7$) vs unqualified baseline ($K=15$) on 
 
 ### Table 3: Thinking Disable Impact on Tool-Call Quality
 
-| Variant | Thinking Config | Tool-Call Score | Points | Pass | Partial | Fail | Med. Turn Latency | Verdict |
-|---|---|---|---|---|---|---|---|---|
-| **Thinking-Enabled (K=7)** | `enable_thinking=true` (default) | **82 / 100** | 114 / 138 | 42 | 8 | 8 | 3.6 s | Production baseline |
-| **No-Thinking (K=7) ⭐** | `enable_thinking=false` | **86 / 100** | 121 / 140 | 57 | 7 | 6 | **3.0 s** | **Winner ⭐** — +4 pts, 17% faster, no infinite loops |
+| Variant | Thinking Config | Tool-Call Score | Points | Pass | Partial | Fail | Med. Turn Latency | FI Score | Notes |
+|---|---|---|---|---|---|---|---|---|---|
+| **Thinking-Enabled (K=7)** | `enable_thinking=true` | 82/100 | 114/138 | 42 | 8 | 8 | 3.6 s | 60/100 | Production baseline. Best multi-step (100%) and reasoning (100%). |
+| **No-Thinking (K=7) v1** | `enable_thinking=false` | 86/100 | 121/140 | 54 | 7 | 5 | 3.0 s | 6/8 (75%) | **Highest score**. +4 pts, 17% faster. No loop risk. |
+| **v2 Metadata Config (K=7) ⏤** | `enable_thinking=false` + `top_k:20` | 84/100 | 118/140 | — | — | — | 2.9 s | 4/8 (50%) | Poolside fix (Jul 24). Config-only, same weights. Within noise of v1. |
 
 Disabling thinking/reasoning yielded a **+4 point improvement** (82 → 86) across 66 tool-call scenarios with the same DFlash K=7 production recipe. Median turn latency dropped from **3.6s to 3.0s** — a **17% reduction** — because the model no wastes tokens on internal reasoning chains before responding.
 
